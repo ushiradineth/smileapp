@@ -1,30 +1,16 @@
-# SolidStart + AuthJS
+# SmileApp | CIS - UOB Third Year First Semester
+- This is a project created for my CS Degree third year first semester module Comparative Integrated Systems.
+- The basis of this App is to use the given API and interact with it.
+- This app has magic link login, github login, guest play, leaderboard and leveling systems.
 
-Everything you need to build an [AuthJS](https://authjs.dev/) authenticated Solid project, powered by [`solid-start`](https://start.solidjs.com);
+# Technologies used
+- SolidStart with SolidJS and Vite
+- TypeScript
+- AuthJS
+- Prisma
+- Tailwind CSS
+- PostgreSQL
 
-## Creating a project
-
-```bash
-# create a new project in the current directory
-npm init solid@latest
-
-# create a new project in my-app
-npm init solid@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-Solid apps are built with _adapters_, which optimise your project for deployment to different environments.
-
-By default, `npm run build` will generate a Node app that you can run with `npm start`. To use a different adapter, add it to the `devDependencies` in `package.json` and specify in your `vite.config.js`.
+# Hosting
+- Hosted on Vercel
+- Database and storage on Supabase
