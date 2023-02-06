@@ -18,15 +18,15 @@ export default function Root() {
   return (
     <Html lang="en">
       <Head>
-        <Title>SolidStart + AuthJS</Title>
+        <Title>SmileApp</Title>
         <Meta charset="utf-8" />
         <Meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Body>
         <Suspense>
           <ErrorBoundary>
-            <A href="/">Home</A>
-            <A href="/protected">Protected</A>
+            {/* <A href="/">Home</A>
+            <A href="/protected">Protected</A> */}
             <Routes>
               <FileRoutes />
             </Routes>
