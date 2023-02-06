@@ -9,6 +9,7 @@
 - AuthJS
 - Prisma
 - Tailwind CSS
+- Zod
 - PostgreSQL
 
 # Hosting
