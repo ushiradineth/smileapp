@@ -8,7 +8,7 @@ const server = z.object({
     NEXTAUTH_URL: z.preprocess((str) => process.env.VERCEL_URL || str, process.env.VERCEL ? z.string().min(1) : z.string().url(), ),
     GITHUB_CLIENT_ID: z.string(),
     GITHUB_CLIENT_SECRET: z.string(),
-    SUPABASE_URL: z.string().url(),
+    SUPABASE_URL: z.string(),
     SUPABASE_IMAGE_URL: z.string().url(),
     EMAIL_SERVER_USER: z.string().email(),
     EMAIL_SERVER_PASSWORD: z.string()
