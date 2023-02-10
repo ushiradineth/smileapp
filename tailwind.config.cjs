@@ -9,6 +9,9 @@ module.exports = {
                 'lg': '1150px'
             },
         },
+        fontFamily: {
+          cal: ['Cal Sans']
+        }
     },
     plugins: [],
 };
