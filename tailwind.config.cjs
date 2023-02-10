@@ -4,9 +4,9 @@ module.exports = {
     theme: {
         extend: {
             screens: {
-                'xsm': '320px',
-                'md': '750px',
-                'lg': '1150px'
+                'sm': '320px',
+                'md': '768px',
+                'lg': '1024px'
             },
         },
         fontFamily: {
