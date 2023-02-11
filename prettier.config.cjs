@@ -11,6 +11,7 @@ module.exports = {
     "^(react-icons/(.*)$)|^(react-icons$)",
     "^(lucide-react/(.*)$)|^(lucide-react$)",
     "^types$",
+    ""
   ],
   importOrderSeparation: false,
   importOrderSortSpecifiers: true,
