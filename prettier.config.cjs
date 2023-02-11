@@ -9,6 +9,7 @@ module.exports = {
     "^[./components]",
     "^[./]",
     "^(react-icons/(.*)$)|^(react-icons$)",
+    "^(lucide-react/(.*)$)|^(lucide-react$)",
     "^types$",
   ],
   importOrderSeparation: false,
