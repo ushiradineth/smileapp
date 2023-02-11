@@ -15,7 +15,7 @@ export default function Layout({ children }: { children: ReactNode; }) {
       <div id="container" className="font-cal h-screen w-full flex flex-col items-center">
         <div id="navbar" className="w-full h-fit pt-[25px] md:pb-[25px] flex items-center px-4 md:px-10 gap-4 md:gap-8 relative max-w-[1024px]">
           <Link href={"/"}>
-            <Image src="/logo-black.png" height={70} width={120} className="w-24 md:w-full" alt={"logo"} />
+            <Image src="/logo-black.png" height={70} width={120} className="w-24 md:w-full" alt={"logo"} priority />
           </Link>
           <div className="flex gap-4 object-right absolute right-4 md:right-10 w-full justify-end">
             <Link href={"https://github.com/ushiradineth/smileapp"}>
@@ -29,7 +29,7 @@ export default function Layout({ children }: { children: ReactNode; }) {
               <DropdownMenuContent className="mr-4 md:mr-10">
                 <LinkItem link="/leaderboard" icon={<MdOutlineLeaderboard className="h-4 w-4" />} title="Leaderboard" hidden={status === "unauthenticated"} />
                 <DropdownMenuSeparator className={`${status === "unauthenticated" ? "hidden" : ""}`} />
-                <LinkItem link={`/profile/${session?.user.handle}`} icon={<User className="h-4 w-4" />} title="Profile" hidden={status === "unauthenticated"} />
+                <LinkItem link={`/profile/${session?.user.id}`} icon={<User className="h-4 w-4" />} title="Profile" hidden={status === "unauthenticated"} />
                 <LinkItem link="/settings" icon={<Settings className="h-4 w-4" />} title="Settings" hidden={status === "unauthenticated"} />
                 <DropdownMenuItem>{status === "unauthenticated" ? <ButtonItem onClick={() => signIn()} icon={<LogIn className="h-4 w-4" />} title="Sign In" /> : <ButtonItem onClick={() => signOut()} icon={<LogOut className="h-4 w-4" />} title="Log out" />}</DropdownMenuItem>
               </DropdownMenuContent>
@@ -39,7 +39,7 @@ export default function Layout({ children }: { children: ReactNode; }) {
         <main className="min-h-screen max-w-[1024px]">{children}</main>
         <div id="footer" className="w-full h-fit mt-[12px] bg-black flex justify-center">
           <div className="h-fit max-w-[1024px] w-full text-white flex items-center p-2 text-[10px] md:text-[20px]">
-            <Image src="/logo-white.png" height={70} width={120} className="h-[35px] w-[60px] m-4 md:m-8 md:h-[70px] md:w-[120px]" alt={"logo"} />
+            <Image src="/logo-white.png" height={70} width={120} className="h-[35px] w-[60px] m-4 md:m-8 md:h-[70px] md:w-[120px]" alt={"logo"} priority />
             <div className="w-full flex flex-col justify-end m-4 md:m-8">
               <p className="flex justify-end">Ushira Dineth</p>
               <div className="flex flex-col md:flex-row-reverse md:gap-4 items-end md:items-center">

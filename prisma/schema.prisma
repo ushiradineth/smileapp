@@ -36,7 +36,6 @@ model Session {
 
 model User {
   id            String    @id @default(cuid())
-  handle        String    @unique @default(cuid())
   name          String?   @default("name")
   email         String?   @unique
   emailVerified DateTime?
