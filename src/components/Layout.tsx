@@ -2,13 +2,12 @@ import React, { type ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/DropdownMenu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/DropdownMenu";
 import { AiFillCaretDown, AiFillGithub, AiFillLinkedin } from "react-icons/ai";
 import { MdOutlineLeaderboard } from "react-icons/md";
 import { Github, LogIn, LogOut, Settings, User } from "lucide-react";
-import { DropdownMenuLabel } from "@radix-ui/react-dropdown-menu";
 
-export default function Layout({ children }: { children: ReactNode; reverse?: boolean }) {
+export default function Layout({ children }: { children: ReactNode; }) {
   const { data: session, status } = useSession();
 
   return (
