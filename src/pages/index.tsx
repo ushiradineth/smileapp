@@ -1,20 +1,18 @@
-import { env } from "../env.mjs";
-import { api } from "../utils/api";
+import { LogOut, User } from "lucide-react";
+import { type ReactNode } from "react";
 import { type NextPage } from "next";
-import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image.js";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { type ReactNode } from "react";
-import { AiFillGithub, AiFillLinkedin, AiFillCaretDown, AiOutlineHome } from "react-icons/ai";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../components/ui/DropdownMenu";
+import { AiFillCaretDown, AiFillGithub, AiFillLinkedin } from "react-icons/ai";
 import { FaUserCircle } from "react-icons/fa";
 import { MdOutlineLeaderboard } from "react-icons/md";
 
 const Index: NextPage = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   console.log(session);
-  const router = useRouter();
 
   return (
     <>
@@ -27,22 +25,49 @@ const Index: NextPage = () => {
         <div id="container" className="font-cal h-screen w-full flex flex-col items-center">
           <div id="navbar" className="w-full h-fit pt-[25px] md:pb-[25px] flex items-center px-6 gap-4 md:gap-8 relative max-w-[1024px]">
             <Link href={"/"}>
-              <Image src="/logo-black.png" height={70} width={120} className="w-24 sm:w-full" alt={"logo"} />
-            </Link>
-            <Link href={"/"}>
-              <AiOutlineHome className="h-6 w-6" />
-            </Link>
-            <Link href={"/leaderboard"}>
-              <MdOutlineLeaderboard className="h-6 w-6" />
+              <Image src="/logo-black.png" height={70} width={120} className="w-24 md:w-full" alt={"logo"} />
             </Link>
             <div className="flex gap-4 object-right absolute right-6 w-full justify-end">
               <Link href={"https://github.com/ushiradineth/smileapp"}>
                 <AiFillGithub className="h-6 w-6" />
               </Link>
-              <Link href={"https://github.com/ushiradineth/smileapp"} className="flex items-center">
-                <FaUserCircle className="h-6 w-6" />
-                <AiFillCaretDown className="h-3 w-3" />
-              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="select-none outline-none flex items-center">
+                  <FaUserCircle className="h-6 w-6" />
+                  <AiFillCaretDown className="h-3 w-3" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent sideOffset={10} align="center">
+                  <DropdownMenuItem>
+                    <Link href={"/leaderboard"} className="w-full flex items-center">
+                      <DropdownMenuLabel>
+                        <MdOutlineLeaderboard className="h-4 w-4" />
+                      </DropdownMenuLabel>
+                      <p className="pr-2">Leaderboard</p>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <Link href={`/profile/${session?.user.handle}`} className="w-full flex items-center">
+                      <DropdownMenuLabel>
+                        <User className="h-4 w-4" />
+                      </DropdownMenuLabel>
+                      <p className="pr-2">Profile</p>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    {status === "unauthenticated" ? (
+                      <button onClick={() => signIn()}>Sign In</button>
+                    ) : (
+                      <button onClick={() => signOut()} className="flex items-center">
+                        <DropdownMenuLabel>
+                          <LogOut className="h-4 w-4" />
+                        </DropdownMenuLabel>
+                        <p>Log out</p>
+                      </button>
+                    )}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
           <div id="slides" className="max-w-[1024px]">
@@ -59,10 +84,10 @@ const Index: NextPage = () => {
               <Placeholder />
             </Block>
           </div>
-          <div id="footer" className="w-screen h-fit mt-[12px] bg-black flex justify-center">
+          <div id="footer" className="w-full h-fit mt-[12px] bg-black flex justify-center">
             <div className="h-fit max-w-[1024px] w-full text-white flex items-center p-2 text-[10px] md:text-[20px]">
               <Image src="/logo-white.png" height={70} width={120} className="h-[35px] w-[60px] m-4 md:m-8 md:h-[70px] md:w-[120px]" alt={"logo"} />
-              <div className="w-full flex flex-col justify-end  m-4 md:m-8">
+              <div className="w-full flex flex-col justify-end m-4 md:m-8">
                 <p className="flex justify-end">Ushira Dineth</p>
                 <div className="flex flex-col md:flex-row-reverse md:gap-4 items-end md:items-center">
                   <p>2214787</p>
