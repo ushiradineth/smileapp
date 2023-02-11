@@ -36,7 +36,7 @@ export default function Layout({ children }: { children: ReactNode; }) {
             </DropdownMenu>
           </div>
         </div>
-        <main className="max-w-[1024px]">{children}</main>
+        <main className="min-h-screen max-w-[1024px]">{children}</main>
         <div id="footer" className="w-full h-fit mt-[12px] bg-black flex justify-center">
           <div className="h-fit max-w-[1024px] w-full text-white flex items-center p-2 text-[10px] md:text-[20px]">
             <Image src="/logo-white.png" height={70} width={120} className="h-[35px] w-[60px] m-4 md:m-8 md:h-[70px] md:w-[120px]" alt={"logo"} />
