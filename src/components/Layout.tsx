@@ -18,7 +18,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     <main className="flex justify-center">
       <div id="container" className="font-cal h-screen w-full flex flex-col items-center">
         <div id="navbar" className="w-full h-fit pt-[25px] md:pb-[25px] flex items-center px-4 md:px-10 gap-4 md:gap-8 relative max-w-[1024px]">
-          <Link href={"/"}>
+          <Link href={"/"} className="z-10">
             <Image src="/logo-black.png" height={70} width={120} className="w-24 md:w-full" alt={"logo"} priority />
           </Link>
           <div className="flex gap-4 object-right absolute right-4 md:right-10 w-full justify-end">
