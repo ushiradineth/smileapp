@@ -1,9 +1,6 @@
 import Head from "next/head";
-import { useSession } from "next-auth/react";
 
 export default function Loader() {
-  const { data: session } = useSession();
-
   return (
     <>
       <Head>
