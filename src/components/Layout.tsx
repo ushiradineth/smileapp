@@ -79,7 +79,7 @@ function LinkItem({ ...props }: { icon: JSX.Element; title: string; link: string
 
 function ButtonItem({ ...props }: { icon: JSX.Element; title: string; onClick: (...args: any[]) => unknown }) {
   return (
-    <button onClick={props.onClick} className="flex items-center">
+    <button onClick={props.onClick} className="flex items-center h-full w-full">
       <DropdownMenuLabel>{props.icon}</DropdownMenuLabel>
       <p>{props.title}</p>
     </button>
