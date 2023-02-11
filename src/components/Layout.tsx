@@ -1,14 +1,18 @@
 import React, { type ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/DropdownMenu";
 import { AiFillCaretDown, AiFillGithub, AiFillLinkedin } from "react-icons/ai";
 import { MdOutlineLeaderboard } from "react-icons/md";
 import { Github, LogIn, LogOut, Settings, User } from "lucide-react";
 
-export default function Layout({ children }: { children: ReactNode; }) {
+export default function Layout({ children }: { children: ReactNode }) {
   const { data: session, status } = useSession();
+  const router = useRouter();  
+
+  if (status === "unauthenticated" && router.pathname !== "/") router.push("/");
 
   return (
     <main className="flex justify-center">
@@ -36,27 +40,27 @@ export default function Layout({ children }: { children: ReactNode; }) {
             </DropdownMenu>
           </div>
         </div>
-        <main className="min-h-screen max-w-[1024px]">{children}</main>
-        <div id="footer" className="w-full h-fit mt-[12px] bg-black flex justify-center">
-          <div className="h-fit max-w-[1024px] w-full text-white flex items-center p-2 text-[10px] md:text-[20px]">
-            <Image src="/logo-white.png" height={70} width={120} className="h-[35px] w-[60px] m-4 md:m-8 md:h-[70px] md:w-[120px]" alt={"logo"} priority />
-            <div className="w-full flex flex-col justify-end m-4 md:m-8">
-              <p className="flex justify-end">Ushira Dineth</p>
-              <div className="flex flex-col md:flex-row-reverse md:gap-4 items-end md:items-center">
-                <p>2214787</p>
-                <Link href={"mailto:ushiradineth@gmail.com"}>ushiradineth@gmail.com</Link>
-                <div className="flex gap-2">
-                  <Link href={"https://github.com/ushiradineth/smileapp"}>
-                    <AiFillGithub className="h-4 w-4 md:h-6 md:w-6" />
-                  </Link>
-                  <Link href={"https://www.linkedin.com/in/ushiradineth/"}>
-                    <AiFillLinkedin className="h-4 w-4 md:h-6 md:w-6" />
-                  </Link>
+        <main className="max-w-[1024px]">{children}</main>
+          <div id="footer" className="w-full h-fit mt-[12px] bg-black flex justify-center">
+            <div className="h-fit max-w-[1024px] w-full text-white flex items-center p-2 text-[10px] md:text-[20px]">
+              <Image src="/logo-white.png" height={70} width={120} className="h-[35px] w-[60px] m-4 md:m-8 md:h-[70px] md:w-[120px]" alt={"logo"} priority />
+              <div className="w-full flex flex-col justify-end m-4 md:m-8">
+                <p className="flex justify-end">Ushira Dineth</p>
+                <div className="flex flex-col md:flex-row-reverse md:gap-4 items-end md:items-center">
+                  <p>2214787</p>
+                  <Link href={"mailto:ushiradineth@gmail.com"}>ushiradineth@gmail.com</Link>
+                  <div className="flex gap-2">
+                    <Link href={"https://github.com/ushiradineth/smileapp"}>
+                      <AiFillGithub className="h-4 w-4 md:h-6 md:w-6" />
+                    </Link>
+                    <Link href={"https://www.linkedin.com/in/ushiradineth/"}>
+                      <AiFillLinkedin className="h-4 w-4 md:h-6 md:w-6" />
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
       </div>
     </main>
   );
