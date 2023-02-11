@@ -14,6 +14,7 @@ This app has magic link login, github login, guest play, leaderboard and levelin
 - Tailwind CSS
 - Zod
 - PostgreSQL
+- UI Primitives by [Shadcn](https://ui.shadcn.com/)
 
 ## Hosting
 
