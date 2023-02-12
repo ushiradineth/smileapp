@@ -6,6 +6,10 @@ export const userRouter = createTRPCRouter({
     return ctx.prisma.user.findUnique({ where: { id: input.id }, include: { wins: true, losses: true } });
   }),
 
+  deleteUser: protectedProcedure.input(z.object({ id: z.string() })).mutation(({ input, ctx }) => {
+    return ctx.prisma.user.delete({ where: { id: input.id } });
+  }),
+
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.user.findMany();
   }),
