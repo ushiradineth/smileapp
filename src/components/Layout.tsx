@@ -10,14 +10,14 @@ import { Github, LogIn, LogOut, Settings, User } from "lucide-react";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const { data: session, status } = useSession();
-  const router = useRouter();  
+  const router = useRouter();
 
   if (status === "unauthenticated" && router.pathname !== "/") router.push("/");
 
   return (
     <main className="flex justify-center">
       <div id="container" className="font-cal h-screen w-full flex flex-col items-center">
-        <div id="navbar" className="w-full h-fit pt-[25px] md:pb-[25px] flex items-center px-4 md:px-10 gap-4 md:gap-8 relative max-w-[1024px]">
+        <div id="navbar" className="bg-white text-black w-full h-fit pt-[25px] md:pb-[25px] flex items-center px-4 md:px-10 gap-4 md:gap-8 relative max-w-[1024px]">
           <Link href={"/"} className="z-10">
             <Image src="/logo-black.png" height={70} width={120} className="w-24 md:w-full" alt={"logo"} priority />
           </Link>
@@ -41,26 +41,26 @@ export default function Layout({ children }: { children: ReactNode }) {
           </div>
         </div>
         <main className="max-w-[1024px]">{children}</main>
-          <div id="footer" className="w-full h-fit mt-[12px] bg-black flex justify-center">
-            <div className="h-fit max-w-[1024px] w-full text-white flex items-center p-2 text-[10px] md:text-[20px]">
-              <Image src="/logo-white.png" height={70} width={120} className="h-[35px] w-[60px] m-4 md:m-8 md:h-[70px] md:w-[120px]" alt={"logo"} priority />
-              <div className="w-full flex flex-col justify-end m-4 md:m-8">
-                <p className="flex justify-end">Ushira Dineth</p>
-                <div className="flex flex-col md:flex-row-reverse md:gap-4 items-end md:items-center">
-                  <p>2214787</p>
-                  <Link href={"mailto:ushiradineth@gmail.com"}>ushiradineth@gmail.com</Link>
-                  <div className="flex gap-2">
-                    <Link href={"https://github.com/ushiradineth/smileapp"}>
-                      <AiFillGithub className="h-4 w-4 md:h-6 md:w-6" />
-                    </Link>
-                    <Link href={"https://www.linkedin.com/in/ushiradineth/"}>
-                      <AiFillLinkedin className="h-4 w-4 md:h-6 md:w-6" />
-                    </Link>
-                  </div>
+        <div id="footer" className="w-full h-fit mt-[12px] bg-black flex justify-center">
+          <div className="h-fit max-w-[1024px] w-full text-white flex items-center p-2 text-[10px] md:text-[20px]">
+            <Image src="/logo-white.png" height={70} width={120} className="h-[35px] w-[60px] m-4 md:m-8 md:h-[70px] md:w-[120px]" alt={"logo"} priority />
+            <div className="w-full flex flex-col justify-end m-4 md:m-8">
+              <p className="flex justify-end">Ushira Dineth</p>
+              <div className="flex flex-col md:flex-row-reverse md:gap-4 items-end md:items-center">
+                <p>2214787</p>
+                <Link href={"mailto:ushiradineth@gmail.com"}>ushiradineth@gmail.com</Link>
+                <div className="flex gap-2">
+                  <Link href={"https://github.com/ushiradineth/smileapp"}>
+                    <AiFillGithub className="h-4 w-4 md:h-6 md:w-6" />
+                  </Link>
+                  <Link href={"https://www.linkedin.com/in/ushiradineth/"}>
+                    <AiFillLinkedin className="h-4 w-4 md:h-6 md:w-6" />
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
+        </div>
       </div>
     </main>
   );
