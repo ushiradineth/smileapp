@@ -29,6 +29,9 @@ const Profile: NextPage = () => {
           <Image src={profile.data?.image || DefaultUserImage} className={"rounded-full"} height={200} width={200} alt={"User Image"}/>
           <p>{profile.data?.name}</p>
           <p>{profile.data?.email}</p>
+          <p>{profile.data?.wins.length}</p>
+          <p>{profile.data?.losses.length}</p>
+          <p>{profile.data?.highestStreak}</p>
         </div>
       </main>
     </>
