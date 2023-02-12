@@ -38,7 +38,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                 <DropdownMenuSeparator className={`${status === "unauthenticated" ? "hidden" : ""}`} />
                 <LinkItem link={`/profile/${session?.user.id}`} icon={<User className="h-4 w-4" />} title="Profile" hidden={status === "unauthenticated"} />
                 <LinkItem link="/settings" icon={<Settings className="h-4 w-4" />} title="Settings" hidden={status === "unauthenticated"} />
-                <ButtonItem onClick={() => deleteUser.mutate({ id: session?.user.id || "" })} icon={<DeleteIcon className="h-4 w-4" />} title="Delete" hidden={status === "unauthenticated"} />
+                <ButtonItem onClick={() => deleteUser.mutate({ id: session?.user.id || "" })} icon={<DeleteIcon className="h-4 w-4" />} title="Delete Account" hidden={status === "unauthenticated"} />
                 {status === "unauthenticated" ? <ButtonItem onClick={() => signIn()} icon={<LogIn className="h-4 w-4" />} title="Sign In" /> : <ButtonItem onClick={() => signOut()} icon={<LogOut className="h-4 w-4" />} title="Log out" />}
               </DropdownMenuContent>
             </DropdownMenu>
