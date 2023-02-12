@@ -1,10 +1,12 @@
 import { type NextPage } from "next";
-import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 import Error from "../../components/Error";
 import Loader from "../../components/Loader";
 import { api } from "../../utils/api";
+import Image from "next/image";
+import { DefaultUserImage } from "../../utils/default";
 
 const Profile: NextPage = () => {
   const { status } = useSession();
@@ -13,7 +15,7 @@ const Profile: NextPage = () => {
   const profile = api.userRouter.getUser.useQuery({ id: router.query.profile as string }, { retry: false, refetchOnWindowFocus: false, enabled: typeof router.query.profile !== "undefined" && status === "authenticated" });
 
   if (profile.isLoading) return <Loader />;
-  if (profile.isError) return <Error text="User not found" />
+  if (profile.isError) return <Error text="User not found" />;
 
   return (
     <>
@@ -23,7 +25,11 @@ const Profile: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div className="min-h-screen">{profile.data?.id}</div>
+        <div className="min-h-screen w-full bg-red-300">
+          <Image src={profile.data?.image || DefaultUserImage} className={"rounded-full"} height={200} width={200} alt={"User Image"}/>
+          <p>{profile.data?.name}</p>
+          <p>{profile.data?.email}</p>
+        </div>
       </main>
     </>
   );
