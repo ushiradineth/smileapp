@@ -7,7 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Necessary for Next auth
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -42,6 +41,9 @@ model User {
   image         String?   @default("https://nockgnasolvxkfacuzmm.supabase.co/storage/v1/object/public/smileapp/Assets/default-user-image.jpg")
   accounts      Account[]
   sessions      Session[]
+  wins          Round[]   @relation("wins")
+  losses        Round[]   @relation("losses")
+  highestStreak Int       @default(0)
 }
 
 model VerificationToken {
@@ -50,4 +52,17 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Round {
+  id           String   @id @default(cuid())
+  solutionLink String
+  solution     Int
+  finishedAt   DateTime @default(now()) @db.Timestamptz(3)
+  userId       String
+  result       String
+  timeTaken    Float
+
+  UserWinsRelation   User[] @relation("wins")
+  UserLossesRelation User[] @relation("losses")
 }
