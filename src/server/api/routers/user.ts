@@ -1,4 +1,4 @@
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { z } from "zod";
 
 export const userRouter = createTRPCRouter({
@@ -10,8 +10,12 @@ export const userRouter = createTRPCRouter({
     return ctx.prisma.user.delete({ where: { id: input.id } });
   }),
 
-  updateUser: protectedProcedure.input(z.object({ id: z.string(), name: z.string(), image: z.string().url() })).mutation(({ input, ctx }) => {
-    return ctx.prisma.user.update({ where: { id: input.id }, data: { name: input.name, image: input.image } });
+  updateName: protectedProcedure.input(z.object({ id: z.string(), name: z.string() })).mutation(({ input, ctx }) => {
+    return ctx.prisma.user.update({ where: { id: input.id }, data: { name: input.name } });
+  }),
+  
+  updateImage: protectedProcedure.input(z.object({ id: z.string(), image: z.string().url() })).mutation(({ input, ctx }) => {
+    return ctx.prisma.user.update({ where: { id: input.id }, data: { name: input.image } });
   }),
 
   getSecretMessage: protectedProcedure.query(() => {
