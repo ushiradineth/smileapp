@@ -13,8 +13,8 @@ const server = z.object({
 });
 
 const client = z.object({
-  NEXT_PUBLIC_SUPABASE_URL: z.string(),
-  NEXT_PUBLIC_SUPABASE_IMAGE_URL: z.string(),
+  NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
+  NEXT_PUBLIC_SUPABASE_IMAGE_URL: z.string().url(),
   NEXT_PUBLIC_SUPABASE_PUBLIC_ANON_KEY: z.string(),
   NEXT_PUBLIC_SUPABASE_BUCKET: z.string()
 });
