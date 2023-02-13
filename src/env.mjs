@@ -2,20 +2,21 @@
 import { z } from "zod";
 
 const server = z.object({
-    DATABASE_URL: z.string().url(),
-    NODE_ENV: z.enum(["development", "test", "production"]),
-    NEXTAUTH_SECRET: process.env.NODE_ENV === "production" ? z.string().min(1) : z.string().min(1).optional(),
-    NEXTAUTH_URL: z.preprocess((str) => process.env.VERCEL_URL || str, process.env.VERCEL ? z.string().min(1) : z.string().url(), ),
-    GITHUB_CLIENT_ID: z.string(),
-    GITHUB_CLIENT_SECRET: z.string(),
-    SUPABASE_URL: z.string(),
-    SUPABASE_IMAGE_URL: z.string().url(),
-    EMAIL_SERVER_USER: z.string().email(),
-    EMAIL_SERVER_PASSWORD: z.string()
+  DATABASE_URL: z.string().url(),
+  NODE_ENV: z.enum(["development", "test", "production"]),
+  NEXTAUTH_SECRET: process.env.NODE_ENV === "production" ? z.string().min(1) : z.string().min(1).optional(),
+  NEXTAUTH_URL: z.preprocess((str) => process.env.VERCEL_URL || str, process.env.VERCEL ? z.string().min(1) : z.string().url(),),
+  GITHUB_CLIENT_ID: z.string(),
+  GITHUB_CLIENT_SECRET: z.string(),
+  EMAIL_SERVER_USER: z.string().email(),
+  EMAIL_SERVER_PASSWORD: z.string()
 });
 
 const client = z.object({
-    // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
+  NEXT_PUBLIC_SUPABASE_URL: z.string(),
+  NEXT_PUBLIC_SUPABASE_IMAGE_URL: z.string(),
+  NEXT_PUBLIC_SUPABASE_PUBLIC_ANON_KEY: z.string(),
+  NEXT_PUBLIC_SUPABASE_BUCKET: z.string()
 });
 
 /**
@@ -24,17 +25,18 @@ const client = z.object({
  * @type {Record<keyof z.infer<typeof server> | keyof z.infer<typeof client>, string | undefined>}
  */
 const processEnv = {
-    DATABASE_URL: process.env.DATABASE_URL,
-    NODE_ENV: process.env.NODE_ENV,
-    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-    GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
-    GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
-    SUPABASE_URL: process.env.SUPABASE_URL,
-    SUPABASE_IMAGE_URL: process.env.SUPABASE_IMAGE_URL,
-    EMAIL_SERVER_USER: process.env.EMAIL_SERVER_USER,
-    EMAIL_SERVER_PASSWORD: process.env.EMAIL_SERVER_PASSWORD
-        // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+  DATABASE_URL: process.env.DATABASE_URL,
+  NODE_ENV: process.env.NODE_ENV,
+  NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+  NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+  GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+  GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
+  EMAIL_SERVER_USER: process.env.EMAIL_SERVER_USER,
+  EMAIL_SERVER_PASSWORD: process.env.EMAIL_SERVER_PASSWORD,
+  NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+  NEXT_PUBLIC_SUPABASE_IMAGE_URL: process.env.NEXT_PUBLIC_SUPABASE_IMAGE_URL,
+  NEXT_PUBLIC_SUPABASE_PUBLIC_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_PUBLIC_ANON_KEY,
+  NEXT_PUBLIC_SUPABASE_BUCKET: process.env.NEXT_PUBLIC_SUPABASE_BUCKET
 };
 
 // Don't touch the part below
@@ -46,38 +48,38 @@ const merged = server.merge(client);
 let env = process.env;
 
 if (!!process.env.SKIP_ENV_VALIDATION == false) {
-    const isServer = typeof window === "undefined";
+  const isServer = typeof window === "undefined";
 
-    const parsed = isServer ?
-        merged.safeParse(processEnv) // on server we can validate all env vars
-        :
-        client.safeParse(processEnv); // on client we can only validate the ones that are exposed
+  const parsed = isServer ?
+    merged.safeParse(processEnv) // on server we can validate all env vars
+    :
+    client.safeParse(processEnv); // on client we can only validate the ones that are exposed
 
-    if (parsed.success === false) {
-        console.error(
-            "❌ Invalid environment variables:",
-            parsed.error.flatten().fieldErrors,
+  if (parsed.success === false) {
+    console.error(
+      "❌ Invalid environment variables:",
+      parsed.error.flatten().fieldErrors,
+    );
+    throw new Error("Invalid environment variables");
+  }
+
+  /** @type z.infer<merged>
+   *  @ts-ignore - can't type this properly in jsdoc */
+  env = new Proxy(parsed.data, {
+    get(target, prop) {
+      if (typeof prop !== "string") return undefined;
+      // Throw a descriptive error if a server-side env var is accessed on the client
+      // Otherwise it would just be returning `undefined` and be annoying to debug
+      if (!isServer && !prop.startsWith("NEXT_PUBLIC_"))
+        throw new Error(
+          process.env.NODE_ENV === "production" ?
+            "❌ Attempted to access a server-side environment variable on the client" :
+            `❌ Attempted to access server-side environment variable '${prop}' on the client`,
         );
-        throw new Error("Invalid environment variables");
-    }
-
-    /** @type z.infer<merged>
-     *  @ts-ignore - can't type this properly in jsdoc */
-    env = new Proxy(parsed.data, {
-        get(target, prop) {
-            if (typeof prop !== "string") return undefined;
-            // Throw a descriptive error if a server-side env var is accessed on the client
-            // Otherwise it would just be returning `undefined` and be annoying to debug
-            if (!isServer && !prop.startsWith("NEXT_PUBLIC_"))
-                throw new Error(
-                    process.env.NODE_ENV === "production" ?
-                    "❌ Attempted to access a server-side environment variable on the client" :
-                    `❌ Attempted to access server-side environment variable '${prop}' on the client`,
-                );
-            /*  @ts-ignore - can't type this properly in jsdoc */
-            return target[prop];
-        },
-    });
+      /*  @ts-ignore - can't type this properly in jsdoc */
+      return target[prop];
+    },
+  });
 }
 
 export { env };
