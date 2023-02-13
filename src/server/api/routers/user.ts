@@ -10,8 +10,8 @@ export const userRouter = createTRPCRouter({
     return ctx.prisma.user.delete({ where: { id: input.id } });
   }),
 
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.user.findMany();
+  updateUser: protectedProcedure.input(z.object({ id: z.string(), name: z.string(), image: z.string().url() })).mutation(({ input, ctx }) => {
+    return ctx.prisma.user.update({ where: { id: input.id }, data: { name: input.name, image: input.image } });
   }),
 
   getSecretMessage: protectedProcedure.query(() => {
