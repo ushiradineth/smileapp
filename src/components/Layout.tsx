@@ -83,8 +83,8 @@ function LinkItem({ ...props }: { icon: JSX.Element; title: string; link: string
 
 function ButtonItem({ ...props }: { icon: JSX.Element; title: string; hidden?: boolean; onClick: (...args: any[]) => unknown }) {
   return (
-    <DropdownMenuItem>
-      <button onClick={props.onClick} className={`flex items-center h-full w-full ${props.hidden ? "hidden" : ""}`}>
+    <DropdownMenuItem className={`${props.hidden ? "hidden" : ""}`}>
+      <button onClick={props.onClick} className={"flex items-center h-full w-full"}>
         <DropdownMenuLabel>{props.icon}</DropdownMenuLabel>
         <p>{props.title}</p>
       </button>
