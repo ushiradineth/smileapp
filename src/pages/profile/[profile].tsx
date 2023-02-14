@@ -34,7 +34,7 @@ const Profile: NextPage = () => {
             <p>{profile.data?.email}</p>
           </div>
           <p className="py-2">Leaderboard Rank #10 (top 0.01%) RANKED BY WINS</p>
-          <Stats wins={profile.data?.wins || []} losses={profile.data?.losses || []} highestStreak={profile.data?.highestStreak || 0} />
+          <Stats wins={profile.data?.wins || []} losses={profile.data?.losses || []} />
           <ExtraDetails wins={profile.data?.wins || []} losses={profile.data?.losses || []} />
         </div>
       </main>
@@ -42,7 +42,7 @@ const Profile: NextPage = () => {
   );
 };
 
-function Stats({ ...props }: { wins: Round[]; losses: Round[]; highestStreak: number }) {
+function Stats({ ...props }: { wins: Round[]; losses: Round[] }) {
   return (
     <>
       <div className="flex gap-2">
@@ -51,7 +51,6 @@ function Stats({ ...props }: { wins: Round[]; losses: Round[]; highestStreak: nu
         <p>{props.losses.length} Losses</p>
       </div>
       <p>{Math.round((props.wins.length || 0 / (props.wins.length || 0 + props.losses.length || 0)) * 100)} Win Rate</p>
-      <p>{props.highestStreak}</p>
     </>
   );
 }
