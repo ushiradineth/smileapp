@@ -43,7 +43,6 @@ model User {
   sessions      Session[]
   wins          Round[]   @relation("wins")
   losses        Round[]   @relation("losses")
-  highestStreak Int       @default(0)
 }
 
 model VerificationToken {
