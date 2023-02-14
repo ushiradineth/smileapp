@@ -29,9 +29,11 @@ const Profile: NextPage = () => {
       <main>
         <div className="min-h-screen w-full flex flex-col items-center">
           <Image src={profile.data?.image || DefaultUserImage} className={"rounded-full"} height={200} width={200} alt={"User Image"} />
-          <p>{profile.data?.name}</p>
-          <p>{profile.data?.email}</p>
-          <p>Leaderboard Rank #10 (top 0.01%)</p>
+          <div className="flex flex-col items-center py-2">
+            <p>{profile.data?.name}</p>
+            <p>{profile.data?.email}</p>
+          </div>
+          <p className="py-2">Leaderboard Rank #10 (top 0.01%) RANKED BY WINS</p>
           <Stats wins={profile.data?.wins || []} losses={profile.data?.losses || []} highestStreak={profile.data?.highestStreak || 0} />
           <ExtraDetails wins={profile.data?.wins || []} losses={profile.data?.losses || []} />
         </div>
