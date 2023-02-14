@@ -43,14 +43,20 @@ const Profile: NextPage = () => {
 };
 
 function Stats({ ...props }: { wins: Round[]; losses: Round[] }) {
+  const winRate = Math.round((props.wins.length || 0 / (props.wins.length || 0 + props.losses.length || 0)) * 100);
+
   return (
     <>
+      <div className="mb-2">
+        <div className={`absolute rounded-sm h-4 w-[${winRate}px] bg-blue-300`}></div>
+        <div className={"rounded-sm h-4 w-[100px] bg-red-300"}></div>
+      </div>
       <div className="flex gap-2">
         <p>{props.wins.length + props.losses.length} Rounds</p>
         <p>{props.wins.length} Wins</p>
         <p>{props.losses.length} Losses</p>
       </div>
-      <p>{Math.round((props.wins.length || 0 / (props.wins.length || 0 + props.losses.length || 0)) * 100)} Win Rate</p>
+      <p>{Number.isNaN(winRate) ? "0%" : winRate} Win Rate</p>
     </>
   );
 }
