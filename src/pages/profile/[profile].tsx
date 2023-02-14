@@ -8,7 +8,7 @@ import Error from "../../components/Error";
 import Loader from "../../components/Loader";
 import { api } from "../../utils/api";
 import { DefaultUserImage } from "../../utils/default";
-import { Round, User } from "@prisma/client";
+import { type Round } from "@prisma/client";
 
 const Profile: NextPage = () => {
   const { status } = useSession();
