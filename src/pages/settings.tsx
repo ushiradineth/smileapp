@@ -17,9 +17,9 @@ const Settings: NextPage = () => {
   const [edited, setEdited] = useState(false);
 
   const supabase = createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_PUBLIC_ANON_KEY);
-  const updateName = api.userRouter.updateName.useMutation({onSettled: () => location.reload()});
-  const updateImage = api.userRouter.updateImage.useMutation({onSettled: () => location.reload()});
-  
+  const updateName = api.userRouter.updateName.useMutation({ onSettled: () => location.reload() });
+  const updateImage = api.userRouter.updateImage.useMutation({ onSettled: () => location.reload() });
+
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
       return;
@@ -35,10 +35,15 @@ const Settings: NextPage = () => {
         upsert: true,
       });
 
-        updateImage.mutate({ id: session?.user?.id || "", image: `${env.NEXT_PUBLIC_SUPABASE_IMAGE_URL}Users/${session?.user.id}/ProfilePicture` });
+      updateImage.mutate({ id: session?.user?.id || "", image: `${env.NEXT_PUBLIC_SUPABASE_IMAGE_URL}Users/${session?.user.id}/ProfilePicture` });
     }
 
     if (name !== session?.user.name) updateName.mutate({ id: session?.user?.id || "", name });
+  };
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (Boolean(e.target.value !== session?.user.name) !== edited) setEdited(e.target.value !== session?.user.name);
+    setName(e.target.value);
   };
 
   useEffect(() => {
@@ -73,14 +78,7 @@ const Settings: NextPage = () => {
           <button className="cursor-pointer text-sm text-blue-400" onClick={() => imageRef.current?.click()}>
             Change profile picture
           </button>
-          <input
-            onChange={(e) => {
-              if (Boolean(e.target.value !== session.user.name) !== edited) setEdited(e.target.value !== session.user.name);
-              setName(e.target.value);
-            }}
-            defaultValue={session.user.name || ""}
-            placeholder="Name"
-          />
+          <input onChange={(e) => handleInputChange(e)} defaultValue={session.user.name || ""} placeholder="Name" />
           <button disabled={!edited} onClick={() => onSave()} className="disabled:bg-blue-300 disabled:cursor-pointer">
             Save
           </button>
