@@ -73,10 +73,10 @@ const Settings: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="w-full flex flex-col items-center gap-4 p-8 border rounded-lg my-40">
-        <div className="flex gap-4">
+        <div className="flex gap-4 items-center">
           <NextImage src={imageURL ? URL.createObjectURL(imageURL) : DefaultUserImage} className={"rounded-3xl h-24 w-24"} height={200} width={200} alt={"User Image"} />
           <input type="file" accept=".png, .jpg, .jpeg" className="hidden" ref={imageRef} onChange={handleFileChange} />
-          <button className="cursor-pointer text-sm text-blue-400" onClick={() => imageRef.current?.click()}>
+          <button className="cursor-pointer text-sm text-blue-400 w-fit h-fit" onClick={() => imageRef.current?.click()}>
             Change profile picture
           </button>
         </div>
@@ -85,7 +85,7 @@ const Settings: NextPage = () => {
             <input onChange={(e) => handleInputChange(e)} defaultValue={session.user.name || ""} placeholder="Name" autoComplete="off" type="text" id={"Name"} className={"h-full placeholder:text-gray-500 focus:outline-none"} maxLength={50} minLength={1}></input>
           </div>
           <button disabled={!edited || updateImage.isLoading || updateName.isLoading} onClick={() => onSave()} className="h-12 w-24 cursor-pointer rounded-2xl disabled:cursor-not-allowed bg-blue-500 text-gray-900 disabled:bg-blue-300 disabled:text-gray-700">
-            {(updateImage.isLoading || updateName.isLoading) ? <Loader loaderOnly={true} /> : "Save"}
+            {updateImage.isLoading || updateName.isLoading ? <Loader loaderOnly={true} /> : "Save"}
           </button>
         </div>
       </main>
