@@ -74,7 +74,7 @@ const Settings: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="my-40">
-        <div className="w-full flex flex-col items-center gap-4 p-8 border rounded-t-lg">
+        <div className="w-full flex flex-col items-center gap-4 px-8 py-4 border rounded-t-lg">
           <div className="flex gap-4 items-center">
             <NextImage src={imageURL ? URL.createObjectURL(imageURL) : DefaultUserImage} className={"rounded-3xl h-24 w-24"} height={200} width={200} alt={"User Image"} />
             <input type="file" accept=".png, .jpg, .jpeg" className="hidden" ref={imageRef} onChange={handleFileChange} />
