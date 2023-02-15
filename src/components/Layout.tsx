@@ -1,20 +1,27 @@
-import React, { type ReactNode } from "react";
+import React, { useEffect, useState, type ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signIn, signOut, useSession } from "next-auth/react";
+import Loader from "./Loader";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/DropdownMenu";
 import { AiFillCaretDown, AiFillGithub, AiFillLinkedin } from "react-icons/ai";
 import { MdOutlineLeaderboard } from "react-icons/md";
 import { Github, LogIn, LogOut, Settings, User } from "lucide-react";
-import Loader from "./Loader";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [isOpen, setOpen] = useState(false);
+
+  useEffect(() => {
+    const closeMenu = () => setOpen(false);
+    router.events.on("routeChangeStart", closeMenu);
+    return () => router.events.off("routeChangeStart", closeMenu);
+  }, [router.events]);
 
   if (status === "unauthenticated" && router.pathname !== "/") router.push("/");
-  if (status === "loading") return <Loader />
+  if (status === "loading") return <Loader />;
 
   return (
     <main className="flex justify-center h-full relative">
@@ -27,7 +34,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             <Link href={"https://github.com/ushiradineth/smileapp"}>
               <Github className="h-6 w-6" />
             </Link>
-            <DropdownMenu>
+            <DropdownMenu open={isOpen} onOpenChange={setOpen}>
               <DropdownMenuTrigger className="select-none outline-none flex items-center">
                 <User className="h-6 w-6" />
                 <AiFillCaretDown className="h-3 w-3" />
