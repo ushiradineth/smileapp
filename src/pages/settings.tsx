@@ -8,6 +8,7 @@ import { env } from "../env.mjs";
 import { api } from "../utils/api";
 import { DefaultUserImage } from "../utils/default";
 import { createClient } from "@supabase/supabase-js";
+import { toast } from "react-toastify";
 
 const Settings: NextPage = () => {
   const { data: session } = useSession();
@@ -18,9 +19,22 @@ const Settings: NextPage = () => {
   const [edited, setEdited] = useState(false);
 
   const supabase = createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_PUBLIC_ANON_KEY);
-  const updateName = api.userRouter.updateName.useMutation({ onSettled: () => location.reload() });
-  const updateImage = api.userRouter.updateImage.useMutation({ onSettled: () => location.reload() });
-  const deleteUser = api.userRouter.deleteUser.useMutation({ onSettled: () => location.reload() });
+
+  const updateName = api.userRouter.updateName.useMutation({
+    onSettled: () => location.reload(),
+    onSuccess: () => toast("Name Updated", { hideProgressBar: true, autoClose: 2000, type: "success" }),
+    onError: () => toast("Failed to change Name", { hideProgressBar: true, autoClose: 2000, type: "error" }),
+  });
+  const updateImage = api.userRouter.updateImage.useMutation({
+    onSettled: () => location.reload(),
+    onSuccess: () => toast("Image Updated", { hideProgressBar: true, autoClose: 2000, type: "success" }),
+    onError: () => toast("Failed to change Image", { hideProgressBar: true, autoClose: 2000, type: "error" }),
+  });
+  const deleteUser = api.userRouter.deleteUser.useMutation({
+    onSettled: () => location.reload(),
+    onSuccess: () => toast("User Deleted", { hideProgressBar: true, autoClose: 2000, type: "success" }),
+    onError: () => toast("Failed to delete User", { hideProgressBar: true, autoClose: 2000, type: "error" }),
+  });
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
@@ -32,12 +46,13 @@ const Settings: NextPage = () => {
 
   const onSave = async () => {
     if (typeof image !== "undefined" && typeof imageURL !== "undefined") {
-      await supabase.storage.from(env.NEXT_PUBLIC_SUPABASE_BUCKET).upload(`/Users/${session?.user.id}/ProfilePicture`, imageURL, {
+      const { error } = await supabase.storage.from(env.NEXT_PUBLIC_SUPABASE_BUCKET).upload(`/Users/${session?.user.id}/ProfilePicture`, imageURL, {
         cacheControl: "1",
         upsert: true,
       });
 
-      updateImage.mutate({ id: session?.user?.id || "", image: `${env.NEXT_PUBLIC_SUPABASE_IMAGE_URL}Users/${session?.user.id}/ProfilePicture` });
+      if (error) toast("Failed to upload Image", { hideProgressBar: true, autoClose: 2000, type: "error" });
+      else updateImage.mutate({ id: session?.user?.id || "", image: `${env.NEXT_PUBLIC_SUPABASE_IMAGE_URL}Users/${session?.user.id}/ProfilePicture` });
     }
 
     if (name !== session?.user.name) updateName.mutate({ id: session?.user?.id || "", name });
