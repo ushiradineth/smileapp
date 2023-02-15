@@ -20,6 +20,7 @@ const Settings: NextPage = () => {
   const supabase = createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_PUBLIC_ANON_KEY);
   const updateName = api.userRouter.updateName.useMutation({ onSettled: () => location.reload() });
   const updateImage = api.userRouter.updateImage.useMutation({ onSettled: () => location.reload() });
+  const deleteUser = api.userRouter.deleteUser.useMutation({ onSettled: () => location.reload() });
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
@@ -72,20 +73,27 @@ const Settings: NextPage = () => {
         <meta name="description" content="SmileApp by Ushira Dineth" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="w-full flex flex-col items-center gap-4 p-8 border rounded-lg my-40">
-        <div className="flex gap-4 items-center">
-          <NextImage src={imageURL ? URL.createObjectURL(imageURL) : DefaultUserImage} className={"rounded-3xl h-24 w-24"} height={200} width={200} alt={"User Image"} />
-          <input type="file" accept=".png, .jpg, .jpeg" className="hidden" ref={imageRef} onChange={handleFileChange} />
-          <button className="cursor-pointer text-sm text-blue-400 w-fit h-fit" onClick={() => imageRef.current?.click()}>
-            Change profile picture
-          </button>
-        </div>
-        <div className="flex flex-col items-center gap-4">
-          <div className={"flex h-[35px] items-center justify-start gap-2 rounded-lg px-4 border"}>
-            <input onChange={(e) => handleInputChange(e)} defaultValue={session.user.name || ""} placeholder="Name" autoComplete="off" type="text" id={"Name"} className={"h-full placeholder:text-gray-500 focus:outline-none"} maxLength={50} minLength={1}></input>
+      <main className="my-40">
+        <div className="w-full flex flex-col items-center gap-4 p-8 border rounded-t-lg">
+          <div className="flex gap-4 items-center">
+            <NextImage src={imageURL ? URL.createObjectURL(imageURL) : DefaultUserImage} className={"rounded-3xl h-24 w-24"} height={200} width={200} alt={"User Image"} />
+            <input type="file" accept=".png, .jpg, .jpeg" className="hidden" ref={imageRef} onChange={handleFileChange} />
+            <button className="cursor-pointer text-sm text-blue-400 w-fit h-fit" onClick={() => imageRef.current?.click()}>
+              Change profile picture
+            </button>
           </div>
-          <button disabled={!edited || updateImage.isLoading || updateName.isLoading} onClick={() => onSave()} className="h-12 w-24 cursor-pointer rounded-2xl disabled:cursor-not-allowed bg-blue-500 text-gray-900 disabled:bg-blue-300 disabled:text-gray-700">
-            {updateImage.isLoading || updateName.isLoading ? <Loader loaderOnly={true} /> : "Save"}
+          <div className="flex flex-col items-center gap-4">
+            <div className={"flex h-[35px] items-center justify-start gap-2 rounded-lg px-4 border"}>
+              <input onChange={(e) => handleInputChange(e)} defaultValue={session.user.name || ""} placeholder="Name" autoComplete="off" type="text" id={"Name"} className={"h-full placeholder:text-gray-500 focus:outline-none"} maxLength={50} minLength={1}></input>
+            </div>
+            <button disabled={!edited || updateImage.isLoading || updateName.isLoading || deleteUser.isLoading} onClick={() => onSave()} className="h-12 w-24 cursor-pointer rounded-2xl disabled:cursor-not-allowed bg-blue-500 disabled:bg-blue-300 disabled:text-gray-700 text-gray-100">
+              {updateImage.isLoading || updateName.isLoading ? <Loader loaderOnly={true} /> : "Save"}
+            </button>
+          </div>
+        </div>
+        <div className="w-full flex flex-col items-center gap-4 px-8 py-4 border border-t-0 rounded-b-lg">
+          <button disabled={updateImage.isLoading || updateName.isLoading || deleteUser.isLoading} onClick={() => deleteUser.mutate({ id: session.user.id })} className="h-12 w-fit px-8 cursor-pointer rounded-2xl disabled:cursor-not-allowed bg-red-400 disabled:bg-red-300 text-gray-100">
+            {deleteUser.isLoading ? <Loader loaderOnly={true} fill={"red"} /> : "Delete Account"}
           </button>
         </div>
       </main>
