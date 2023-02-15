@@ -8,6 +8,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { AiFillCaretDown, AiFillGithub, AiFillLinkedin } from "react-icons/ai";
 import { MdOutlineLeaderboard } from "react-icons/md";
 import { DeleteIcon, Github, LogIn, LogOut, Settings, User } from "lucide-react";
+import Loader from "./Loader";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const { data: session, status } = useSession();
@@ -16,6 +17,8 @@ export default function Layout({ children }: { children: ReactNode }) {
   const deleteUser = api.userRouter.deleteUser.useMutation({ onSuccess: () => signOut() });
 
   if (status === "unauthenticated" && router.pathname !== "/") router.push("/");
+
+  if (status === "loading") return <Loader />
 
   return (
     <main className="flex justify-center">
