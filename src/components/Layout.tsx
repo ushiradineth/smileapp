@@ -3,21 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { api } from "../utils/api";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/DropdownMenu";
 import { AiFillCaretDown, AiFillGithub, AiFillLinkedin } from "react-icons/ai";
 import { MdOutlineLeaderboard } from "react-icons/md";
-import { DeleteIcon, Github, LogIn, LogOut, Settings, User } from "lucide-react";
+import { Github, LogIn, LogOut, Settings, User } from "lucide-react";
 import Loader from "./Loader";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  const deleteUser = api.userRouter.deleteUser.useMutation({ onSuccess: () => signOut() });
-
   if (status === "unauthenticated" && router.pathname !== "/") router.push("/");
-
   if (status === "loading") return <Loader />
 
   return (
@@ -41,7 +37,6 @@ export default function Layout({ children }: { children: ReactNode }) {
                 <DropdownMenuSeparator className={`${status === "unauthenticated" ? "hidden" : ""}`} />
                 <LinkItem link={`/profile/${session?.user.id}`} icon={<User className="h-4 w-4" />} title="Profile" hidden={status === "unauthenticated"} />
                 <LinkItem link="/settings" icon={<Settings className="h-4 w-4" />} title="Settings" hidden={status === "unauthenticated"} />
-                <ButtonItem onClick={() => deleteUser.mutate({ id: session?.user.id || "" })} icon={<DeleteIcon className="h-4 w-4" />} title="Delete Account" hidden={status === "unauthenticated"} />
                 {status === "unauthenticated" ? <ButtonItem onClick={() => signIn()} icon={<LogIn className="h-4 w-4" />} title="Sign In" /> : <ButtonItem onClick={() => signOut()} icon={<LogOut className="h-4 w-4" />} title="Log out" />}
               </DropdownMenuContent>
             </DropdownMenu>
