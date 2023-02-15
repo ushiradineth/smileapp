@@ -11,7 +11,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const Settings: NextPage = () => {
   const { data: session } = useSession();
-  const name = useRef<HTMLInputElement | null>(null);
+  const [name, setName] = useState(session?.user.name || "");
   const supabase = createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_PUBLIC_ANON_KEY);
   const updateName = api.userRouter.updateName.useMutation();
 
@@ -39,9 +39,9 @@ const Settings: NextPage = () => {
       <main>
         <div className="w-full mb-40">
           <Image src={session.user.image || DefaultUserImage} className={"rounded-full"} height={200} width={200} alt={"User Image"} />
-          <input ref={name} defaultValue={session.user.name || ""} placeholder="Name" />
-          <button disabled={session?.user.name !== name.current?.value} onClick={() => updateName.mutate({ id: session?.user.id || "", name: name.current?.value || session.user.name || "" })} className="bg-black disabled:bg-blue-300 disabled:cursor-pointer">
-            Change Name
+          <input onChange={(e) => setName(e.target.value)} defaultValue={session.user.name || ""} placeholder="Name" />
+          <button disabled={session?.user.name !== name} onClick={() => updateName.mutate({ id: session?.user.id || "", name })} className="bg-black disabled:bg-blue-300 disabled:cursor-pointer">
+            Save
           </button>
           {/* <div className="mb-4 h-24 w-full flex items-center justify-center">
             <button className="cursor-pointer text-sm text-blue-400" onClick={() => imageRef.current?.click()}>
