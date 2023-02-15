@@ -10,7 +10,7 @@ const Index: NextPage = () => {
         <meta name="description" content="SmileApp by Ushira Dineth" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
+      <main className="mb-40">
         <Block>
           <Details title="TEST YOUR INTELECT WITH THIS SIMPLE AND FUN GAME" description="Simple, easy and interactive gameplay" />
           <Placeholder />

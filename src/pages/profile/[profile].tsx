@@ -27,7 +27,7 @@ const Profile: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div className="w-full flex">
+        <div className="w-full flex mb-20">
           <div className="flex flex-col items-center border-2 h-fit my-10 p-8 rounded-sm">
             <Image src={profile.data?.image || DefaultUserImage} className={"rounded-full"} height={200} width={200} alt={"User Image"} />
             <div className="flex flex-col items-center py-2">

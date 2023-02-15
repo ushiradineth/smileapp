@@ -21,7 +21,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   if (status === "loading") return <Loader />
 
   return (
-    <main className="flex justify-center">
+    <main className="flex justify-center h-full relative">
       <div id="container" className="font-cal min-h-screen w-full flex flex-col items-center">
         <div id="navbar" className="bg-white text-black w-full h-fit pt-[25px] md:pb-[25px] flex items-center px-4 md:px-10 gap-4 md:gap-8 relative max-w-[1024px]">
           <Link href={"/"} className="z-10">
@@ -48,7 +48,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           </div>
         </div>
         <main className="max-w-[1024px]">{children}</main>
-        <div id="footer" className="w-full h-fit mt-[12px] bg-black flex justify-center">
+        <div id="footer" className="w-full h-fit bg-black flex justify-center absolute bottom-0">
           <div className="h-fit max-w-[1024px] w-full text-white flex items-center p-2 text-[10px] md:text-[20px]">
             <Image src="/logo-white.png" height={70} width={120} className="h-[35px] w-[60px] m-4 md:m-8 md:h-[70px] md:w-[120px]" alt={"logo"} priority />
             <div className="w-full flex flex-col justify-end m-4 md:m-8">

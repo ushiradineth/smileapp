@@ -37,7 +37,7 @@ const Settings: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div className="min-h-screen w-full bg-red-300 ">
+        <div className="w-full mb-40">
           <Image src={session.user.image || DefaultUserImage} className={"rounded-full"} height={200} width={200} alt={"User Image"} />
           <input ref={name} defaultValue={session.user.name || ""} placeholder="Name" />
           <button disabled={session?.user.name !== name.current?.value} onClick={() => updateName.mutate({ id: session?.user.id || "", name: name.current?.value || session.user.name || "" })} className="bg-black disabled:bg-blue-300 disabled:cursor-pointer">
