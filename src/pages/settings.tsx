@@ -71,15 +71,19 @@ const Settings: NextPage = () => {
         <meta name="description" content="SmileApp by Ushira Dineth" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <div className="w-full mb-40">
-          <NextImage src={URL.createObjectURL(imageURL || new Blob())} className={"rounded-full"} height={200} width={200} alt={"User Image"} />
-          <input type="file" accept=".png, .jpg, .jpeg" ref={imageRef} onChange={handleFileChange} style={{ display: "none" }} />
+      <main className="w-full flex flex-col items-center gap-4 p-8 border rounded-lg my-40">
+        <div className="flex gap-4">
+          <NextImage src={URL.createObjectURL(imageURL || new Blob())} className={"rounded-3xl h-24 w-24"} height={200} width={200} alt={"User Image"} />
+          <input type="file" accept=".png, .jpg, .jpeg" className="hidden" ref={imageRef} onChange={handleFileChange} />
           <button className="cursor-pointer text-sm text-blue-400" onClick={() => imageRef.current?.click()}>
             Change profile picture
           </button>
-          <input onChange={(e) => handleInputChange(e)} defaultValue={session.user.name || ""} placeholder="Name" />
-          <button disabled={!edited} onClick={() => onSave()} className="disabled:bg-blue-300 disabled:cursor-pointer">
+        </div>
+        <div className="flex flex-col items-center gap-4">
+          <div className={"flex h-[35px] items-center justify-start gap-2 rounded-lg px-4 border"}>
+            <input onChange={(e) => handleInputChange(e)} defaultValue={session.user.name || ""} placeholder="Name" autoComplete="off" type="text" id={"Name"} className={"h-full placeholder:text-gray-500 focus:outline-none"} maxLength={50} minLength={1}></input>
+          </div>
+          <button disabled={!edited} onClick={() => onSave()} className="h-12 w-24 cursor-pointer rounded-2xl disabled:cursor-not-allowed bg-blue-500 text-gray-900 disabled:bg-blue-300 disabled:text-gray-700">
             Save
           </button>
         </div>
