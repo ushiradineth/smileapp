@@ -28,8 +28,4 @@ export const userRouter = createTRPCRouter({
   updateImage: protectedProcedure.input(z.object({ id: z.string(), image: z.string().url() })).mutation(({ input, ctx }) => {
     return ctx.prisma.user.update({ where: { id: input.id }, data: { image: input.image } });
   }),
-
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
-  }),
 });
