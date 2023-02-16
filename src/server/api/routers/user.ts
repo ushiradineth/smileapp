@@ -5,7 +5,7 @@ import { z } from "zod";
 
 export const userRouter = createTRPCRouter({
   getUser: protectedProcedure.input(z.object({ id: z.string() })).query(({ input, ctx }) => {
-    return ctx.prisma.user.findUnique({ where: { id: input.id }, include: { wins: true, losses: true } });
+    return ctx.prisma.user.findUnique({ where: { id: input.id }, include: { rounds: true } });
   }),
 
   deleteUser: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ input, ctx }) => {
