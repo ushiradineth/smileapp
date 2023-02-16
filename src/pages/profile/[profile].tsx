@@ -58,7 +58,7 @@ function Stats({ ...props }: { wins: number, losses: number, rounds: number }) {
         <p>{props.wins} Wins</p>
         <p>{props.losses} Losses</p>
       </div>
-      <p>{Number.isNaN(winRate) ? "0%" : winRate} Win Rate</p>
+      <p>{Number.isNaN(winRate) ? "0" : winRate}% Win Rate</p>
     </>
   );
 }
