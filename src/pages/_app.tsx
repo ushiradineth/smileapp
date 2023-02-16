@@ -4,17 +4,21 @@ import { SessionProvider } from "next-auth/react";
 import Layout from "../components/Layout";
 import "../styles/globals.css";
 import { api } from "../utils/api";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const MyApp: AppType<{ session: Session | null }> = ({ Component, pageProps: { session, ...pageProps } }) => {
+  const queryClient = new QueryClient();
   return (
-    <SessionProvider session={session}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-      <ToastContainer />
-    </SessionProvider>
+    <QueryClientProvider client={queryClient}>
+      <SessionProvider session={session}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+        <ToastContainer />
+      </SessionProvider>
+    </QueryClientProvider>
   );
 };
 
