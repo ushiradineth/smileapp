@@ -28,4 +28,14 @@ export const userRouter = createTRPCRouter({
   updateImage: protectedProcedure.input(z.object({ id: z.string(), image: z.string().url() })).mutation(({ input, ctx }) => {
     return ctx.prisma.user.update({ where: { id: input.id }, data: { image: input.image } });
   }),
+
+  getLeaderboard: protectedProcedure.input(z.object({ page: z.number() })).query(({ input, ctx }) => {
+    return ctx.prisma.user.findMany({
+      take: 25,
+      skip: (input.page - 1) * 25,
+      orderBy: {
+        wins: "desc",
+      },
+    });
+  }),
 });
