@@ -64,6 +64,8 @@ model Round {
 
   LevelWinsRelation    Level[] @relation("levelRounds")
   LevelFastestRelation Level[] @relation("levelFastest")
+
+  @@index([userId])
 }
 
 model Level {
@@ -73,4 +75,6 @@ model Level {
   rounds         Round[] @relation("levelRounds")
   fastestRoundId String?
   fastestRound   Round?   @relation("levelFastest", fields: [fastestRoundId], references: [id], onDelete: SetNull)
+
+  @@index([fastestRoundId])
 }
