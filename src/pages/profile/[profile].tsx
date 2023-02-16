@@ -35,7 +35,7 @@ const Profile: NextPage = () => {
               <p>{profile.data?.email}</p>
             </div>
             <p className="py-2">Rank #10 (top 0.01%)</p>
-            <Stats rounds={profile.data?.rounds || []} />
+            <Stats wins={profile.data?.wins || 0} losses={profile.data?.losses || 0} rounds={profile.data?.rounds.length || 0} />
             <ExtraDetails rounds={profile.data?.rounds || []} />
           </div>
         </div>
@@ -44,8 +44,8 @@ const Profile: NextPage = () => {
   );
 };
 
-function Stats({ ...props }: { rounds: Round[] }) {
-  const winRate = Math.round((props.rounds.map(e => e.success).length || 0 / (props.rounds.map(e => e.success).length || 0 + props.rounds.map(e => !e.success).length || 0)) * 100);
+function Stats({ ...props }: { wins: number, losses: number, rounds: number }) {
+  const winRate = Math.round((props.wins / (props.wins + props.losses)) * 100);
 
   return (
     <>
@@ -54,9 +54,9 @@ function Stats({ ...props }: { rounds: Round[] }) {
         <div className={"rounded-sm h-4 w-[100px] bg-red-300"}></div>
       </div>
       <div className="flex gap-2">
-        <p>{props.rounds.length} Rounds</p>
-        <p>{props.rounds.map(e => e.success).length} Wins</p>
-        <p>{props.rounds.map(e => !e.success).length} Losses</p>
+        <p>{props.rounds} Rounds</p>
+        <p>{props.wins} Wins</p>
+        <p>{props.losses} Losses</p>
       </div>
       <p>{Number.isNaN(winRate) ? "0%" : winRate} Win Rate</p>
     </>

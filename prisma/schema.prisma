@@ -42,6 +42,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
   rounds        Round[]
+  wins          Int       @default(0)
+  losses        Int       @default(0)
 }
 
 model VerificationToken {
@@ -74,7 +76,7 @@ model Level {
   solution       Int
   rounds         Round[] @relation("levelRounds")
   fastestRoundId String?
-  fastestRound   Round?   @relation("levelFastest", fields: [fastestRoundId], references: [id], onDelete: SetNull)
+  fastestRound   Round?  @relation("levelFastest", fields: [fastestRoundId], references: [id], onDelete: SetNull)
 
   @@index([fastestRoundId])
 }
