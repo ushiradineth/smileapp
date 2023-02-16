@@ -41,8 +41,7 @@ model User {
   image         String?   @default("https://nockgnasolvxkfacuzmm.supabase.co/storage/v1/object/public/smileapp/Assets/default-user-image.jpg")
   accounts      Account[]
   sessions      Session[]
-  wins          Round[]   @relation("wins")
-  losses        Round[]   @relation("losses")
+  rounds        Round[]
 }
 
 model VerificationToken {
@@ -57,11 +56,21 @@ model Round {
   id           String   @id @default(cuid())
   solutionLink String
   solution     Int
-  finishedAt   DateTime @default(now()) @db.Timestamptz(3)
+  user         User     @relation(fields: [userId], references: [id])
   userId       String
-  result       String
-  timeTaken    Float
+  success      Boolean
+  finishedAt   DateTime @default(now()) @db.Timestamptz(3)
+  timeTaken    Float?
 
-  UserWinsRelation   User[] @relation("wins")
-  UserLossesRelation User[] @relation("losses")
+  LevelWinsRelation    Level[] @relation("levelRounds")
+  LevelFastestRelation Level[] @relation("levelFastest")
+}
+
+model Level {
+  id             String  @id @default(cuid())
+  solutionLink   String  @unique
+  solution       Int
+  rounds         Round[] @relation("levelRounds")
+  fastestRoundId String
+  fastestRound   Round   @relation("levelFastest", fields: [fastestRoundId], references: [id])
 }

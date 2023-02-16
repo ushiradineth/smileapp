@@ -35,8 +35,8 @@ const Profile: NextPage = () => {
               <p>{profile.data?.email}</p>
             </div>
             <p className="py-2">Rank #10 (top 0.01%)</p>
-            <Stats wins={profile.data?.wins || []} losses={profile.data?.losses || []} />
-            <ExtraDetails wins={profile.data?.wins || []} losses={profile.data?.losses || []} />
+            <Stats rounds={profile.data?.rounds || []} />
+            <ExtraDetails rounds={profile.data?.rounds || []} />
           </div>
         </div>
       </main>
@@ -44,8 +44,8 @@ const Profile: NextPage = () => {
   );
 };
 
-function Stats({ ...props }: { wins: Round[]; losses: Round[] }) {
-  const winRate = Math.round((props.wins.length || 0 / (props.wins.length || 0 + props.losses.length || 0)) * 100);
+function Stats({ ...props }: { rounds: Round[] }) {
+  const winRate = Math.round((props.rounds.map(e => e.success).length || 0 / (props.rounds.map(e => e.success).length || 0 + props.rounds.map(e => !e.success).length || 0)) * 100);
 
   return (
     <>
@@ -54,31 +54,26 @@ function Stats({ ...props }: { wins: Round[]; losses: Round[] }) {
         <div className={"rounded-sm h-4 w-[100px] bg-red-300"}></div>
       </div>
       <div className="flex gap-2">
-        <p>{props.wins.length + props.losses.length} Rounds</p>
-        <p>{props.wins.length} Wins</p>
-        <p>{props.losses.length} Losses</p>
+        <p>{props.rounds.length} Rounds</p>
+        <p>{props.rounds.map(e => e.success).length} Wins</p>
+        <p>{props.rounds.map(e => !e.success).length} Losses</p>
       </div>
       <p>{Number.isNaN(winRate) ? "0%" : winRate} Win Rate</p>
     </>
   );
 }
 
-function ExtraDetails({ ...props }: { wins: Round[]; losses: Round[] }) {
+function ExtraDetails({ ...props }: { rounds: Round[] }) {
   let weekGameTime = 0;
   let allGameTime = 0;
 
-  props.wins.forEach((e) => {
+  props.rounds.forEach((e) => {
     if (e.finishedAt.getTime() > Date.now() - 1000 * 60 * 60 * 24 * 7) weekGameTime = weekGameTime + e.finishedAt.getMinutes();
     allGameTime = allGameTime + e.finishedAt.getMinutes();
   });
 
-  props.losses.forEach((e) => {
-    if (e.finishedAt.getTime() > Date.now() - 1000 * 60 * 60 * 24 * 7) weekGameTime = weekGameTime + e.finishedAt.getMinutes();
-    allGameTime = allGameTime + e.finishedAt.getMinutes();
-  });
-
-  const processedValues = Object.values(props.wins);
-  const fastestTime = Math.min(...processedValues.map((obj) => obj.timeTaken));
+  const processedValues = Object.values(props.rounds);
+  const fastestTime = Math.min(...processedValues.map((obj) => obj.timeTaken || 0));
 
   return (
     <div className="flex items-center gap-2">
@@ -89,7 +84,7 @@ function ExtraDetails({ ...props }: { wins: Round[]; losses: Round[] }) {
       </div>
       <div className={`flex flex-col h-fit items-center rounded-lg border p-2 ${fastestTime === Infinity && "hidden"}`}>
         <p>Fastest round</p>
-        <Link href={props.wins.find((e) => e.timeTaken == fastestTime)?.solutionLink || "/"}>
+        <Link href={props.rounds.find((e) => e.timeTaken == fastestTime)?.solutionLink || "/"}>
           <p>Time: {fastestTime}</p>
         </Link>
       </div>
