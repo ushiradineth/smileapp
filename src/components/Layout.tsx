@@ -1,4 +1,4 @@
-import React, { useEffect, useState, type ReactNode } from "react";
+import React, { type ReactNode, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -7,7 +7,7 @@ import Loader from "./Loader";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/DropdownMenu";
 import { AiFillCaretDown, AiFillGithub, AiFillLinkedin } from "react-icons/ai";
 import { MdOutlineLeaderboard } from "react-icons/md";
-import { Github, LogIn, LogOut, Settings, User } from "lucide-react";
+import { Gamepad2, Github, LogIn, LogOut, Settings, User } from "lucide-react";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const { data: session, status } = useSession();
@@ -40,6 +40,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                 <AiFillCaretDown className="h-3 w-3" />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="mr-4 md:mr-10">
+                <LinkItem link="/play" icon={<Gamepad2 className="h-4 w-4" />} title="Play" hidden={status === "unauthenticated"} />
                 <LinkItem link="/leaderboard" icon={<MdOutlineLeaderboard className="h-4 w-4" />} title="Leaderboard" hidden={status === "unauthenticated"} />
                 <DropdownMenuSeparator className={`${status === "unauthenticated" ? "hidden" : ""}`} />
                 <LinkItem link={`/profile/${session?.user.id}`} icon={<User className="h-4 w-4" />} title="Profile" hidden={status === "unauthenticated"} />
