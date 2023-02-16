@@ -56,7 +56,7 @@ model Round {
   id           String   @id @default(cuid())
   solutionLink String
   solution     Int
-  user         User     @relation(fields: [userId], references: [id])
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       String
   success      Boolean
   finishedAt   DateTime @default(now()) @db.Timestamptz(3)
@@ -71,6 +71,6 @@ model Level {
   solutionLink   String  @unique
   solution       Int
   rounds         Round[] @relation("levelRounds")
-  fastestRoundId String
-  fastestRound   Round   @relation("levelFastest", fields: [fastestRoundId], references: [id])
+  fastestRoundId String?
+  fastestRound   Round?   @relation("levelFastest", fields: [fastestRoundId], references: [id], onDelete: SetNull)
 }
