@@ -8,7 +8,7 @@ export const roundRouter = createTRPCRouter({
     if (!level) {
       level = await ctx.prisma.level.create({
         data: {
-          id: input.question,
+          id: input.question.split("/")[6]?.split(".png")[0] || input.question,
           link: input.question,
           solution: input.solution,
         },
