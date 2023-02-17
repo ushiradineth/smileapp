@@ -108,7 +108,7 @@ const Settings: NextPage = () => {
         </div>
         <div className="w-full flex flex-col items-center gap-4 px-8 py-4 border border-t-0 rounded-b-lg">
           <button disabled={updateImage.isLoading || updateName.isLoading || deleteUser.isLoading} onClick={() => deleteUser.mutate({ id: session.user.id })} className="h-12 w-fit px-8 cursor-pointer rounded-2xl disabled:cursor-not-allowed bg-red-400 disabled:bg-red-300 text-gray-100">
-            {deleteUser.isLoading ? <Loader loaderOnly={true} fill={"red"} /> : "Delete Account"}
+            {deleteUser.isLoading ? <Loader loaderOnly={true} /> : "Delete Account"}
           </button>
         </div>
       </main>
