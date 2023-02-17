@@ -46,11 +46,14 @@ function Leaderboard() {
                   <td className="text-center py-3">{user.losses}</td>
                   <td className="text-center py-3">
                     <div className="flex justify-center">
-                      <div className={`absolute rounded-sm h-4 w-[${winRate}px] bg-blue-300`}></div>
-                      <div className={"rounded-sm h-4 w-[100px] text-[10px] bg-red-300 grid grid-flow-col place-content-stretch"}>
-                        <p className="truncate">{user.wins}W</p>
-                        <p className="truncate">{Number.isNaN(winRate) ? "0" : winRate}%</p>
-                        <p className="truncate">{user.losses}L</p>
+                      <div>
+                        <div className={"absolute z-20 rounded-sm h-4 w-[100px] text-[10px] grid grid-flow-col place-content-stretch"}>
+                          <p className="truncate">{user.wins}W</p>
+                          <p className="truncate">{Number.isNaN(winRate) ? "0" : winRate}%</p>
+                          <p className="truncate">{user.losses}L</p>
+                        </div>
+                        <div className={`absolute z-10 rounded-sm h-4 w-[${winRate}px] bg-blue-300`}></div>
+                        <div className={"rounded-sm h-4 w-[100px] text-[10px] bg-red-300 grid grid-flow-col place-content-stretch"} />
                       </div>
                     </div>
                   </td>
