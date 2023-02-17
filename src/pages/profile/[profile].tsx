@@ -8,6 +8,7 @@ import Error from "../../components/Error";
 import Loader from "../../components/Loader";
 import { api } from "../../utils/api";
 import { DefaultUserImage } from "../../utils/default";
+import { Link2, LinkIcon } from "lucide-react";
 import { type Round } from "@prisma/client";
 
 const Profile: NextPage = () => {
@@ -44,7 +45,7 @@ const Profile: NextPage = () => {
   );
 };
 
-function Stats({ ...props }: { wins: number, losses: number, rounds: number }) {
+function Stats({ ...props }: { wins: number; losses: number; rounds: number }) {
   const winRate = Math.round((props.wins / (props.wins + props.losses)) * 100);
 
   return (
@@ -68,8 +69,8 @@ function ExtraDetails({ ...props }: { rounds: Round[] }) {
   let allGameTime = 0;
 
   props.rounds.forEach((e) => {
-    if (e.finishedAt.getTime() > Date.now() - 1000 * 60 * 60 * 24 * 7) weekGameTime = weekGameTime + e.finishedAt.getMinutes();
-    allGameTime = allGameTime + e.finishedAt.getMinutes();
+    if (e.finishedAt.getTime() > Date.now() - 1000 * 60 * 60 * 24 * 7) weekGameTime = weekGameTime + (e.timeTaken || 0) / 1000;
+    allGameTime = allGameTime + (e.timeTaken || 0) / 1000;
   });
 
   const processedValues = Object.values(props.rounds);
@@ -79,13 +80,14 @@ function ExtraDetails({ ...props }: { rounds: Round[] }) {
     <div className="flex items-center gap-2">
       <div className="flex flex-col items-center rounded-lg border p-2">
         <p>Game time</p>
-        <p>Last Week: {weekGameTime}</p>
-        <p>All time: {allGameTime}</p>
+        <p>Last Week: {Math.round(weekGameTime / 60)}m</p>
+        <p>All time: {Math.round(allGameTime / 60)}m</p>
       </div>
       <div className={`flex flex-col h-fit items-center rounded-lg border p-2 ${fastestTime === Infinity && "hidden"}`}>
         <p>Fastest round</p>
-        <Link href={`https://www.sanfoh.com/uob/smile/data/${props.rounds.find((e) => e.timeTaken == fastestTime)?.levelId}.png` || "/"}>
-          <p>Time: {fastestTime}</p>
+        <p>Time: {fastestTime / 1000}s</p>
+        <Link className="flex gap-2" href={`https://www.sanfoh.com/uob/smile/data/${props.rounds.find((e) => e.timeTaken == fastestTime)?.levelId}.png` || "/"}>
+          Round <LinkIcon size={20} />
         </Link>
       </div>
     </div>
