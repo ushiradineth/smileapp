@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import Error from "../components/Error";
 import Loader from "../components/Loader";
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../components/ui/AlertboxMenu";
 import { api } from "../utils/api";
 import { DefaultBackgroundImage } from "../utils/default";
 import { HeartCrack, HeartIcon, Send } from "lucide-react";
@@ -16,6 +18,7 @@ function Play() {
   const [timer, setTimer] = useState(false);
   const [time, setTime] = useState(0);
   const [hearts, setHearts] = useState(3);
+  const [winStreak, setWinStreak] = useState(0);
 
   const setRound = api.roundRouter.setRound.useMutation({});
   const { data, error, isLoading, refetch } = useQuery("game", getGame, { refetchOnWindowFocus: false, retry: false, onSettled: () => setTimer(true) });
@@ -23,6 +26,7 @@ function Play() {
   const onWin = () => {
     (document.getElementById("Answer") as HTMLInputElement).value = "";
     toast("Answer Correct", { hideProgressBar: true, autoClose: 2000, type: "success" });
+    setWinStreak(winStreak + 1);
     setRound.mutate(
       { userid: session?.user.id || "", question: data?.question || "", solution: data?.solution || 0, time, success: true },
       {
@@ -67,9 +71,12 @@ function Play() {
         <meta name="description" content="SmileApp by Ushira Dineth" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="my-28 flex flex-col items-center gap-2 rounded-lg border p-4 md:p-8">
-        <Hearts hearts={hearts} />
-        <Stopwatch timer={timer} setTimer={setTimer} time={time} setTime={setTime} />
+      <main className="my-28 flex flex-col items-center gap-2 rounded-lg border px-1 py-8">
+        <div className="grid place-items-center grid-flow-col gap-6">
+          <Hearts hearts={hearts} />
+          <Stopwatch timer={timer} setTimer={setTimer} time={time} setTime={setTime} />
+          <EndMenu winStreak={winStreak} hearts={hearts} setTimer={setTimer} />
+        </div>
         <Image src={data?.question || DefaultBackgroundImage} className="h-auto max-h-[200px] max-w-[300px] md:object-contain md:max-w-none md:w-[500px]" width={1000} height={1000} alt={"question"} priority />
         <div className="flex gap-2">
           <div className={"flex h-[35px] items-center justify-start gap-2 rounded-lg px-4 border"}>
@@ -122,12 +129,37 @@ function Stopwatch({ ...props }: { timer: boolean; setTimer: (arg0: boolean) => 
   }, [props.timer]);
 
   return (
-    <div className="stopwatch">
-      <div className="numbers">
-        <span>{("0" + Math.floor((props.time / 60000) % 60)).slice(-2)}:</span>
-        <span>{("0" + Math.floor((props.time / 1000) % 60)).slice(-2)}:</span>
-        <span>{("0" + ((props.time / 10) % 100)).slice(-2)}</span>
-      </div>
+    <div className="flex items-center w-[60px]">
+      <span>{("0" + Math.floor((props.time / 60000) % 60)).slice(-2)}:</span>
+      <span>{("0" + Math.floor((props.time / 1000) % 60)).slice(-2)}:</span>
+      <span>{("0" + ((props.time / 10) % 100)).slice(-2)}</span>
     </div>
+  );
+}
+
+function EndMenu({ ...props }: { winStreak: number; hearts: number; setTimer: (arg0: boolean) => void }) {
+  const router = useRouter();
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger className="border-2 rounded-lg px-4 py-2" onClick={() => props.setTimer(false)}>
+        END
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Well done!</AlertDialogTitle>
+          <AlertDialogDescription>
+            <div className="">
+              <p>Wins: {props.winStreak}</p>
+              <p>Hearts Lost: {3 - props.hearts}</p>
+            </div>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogAction onClick={() => router.push("/")}>Home</AlertDialogAction>
+          <AlertDialogAction onClick={() => location.reload()}>Restart</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
