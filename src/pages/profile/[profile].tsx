@@ -8,7 +8,7 @@ import Error from "../../components/Error";
 import Loader from "../../components/Loader";
 import { api } from "../../utils/api";
 import { DefaultUserImage } from "../../utils/default";
-import { Link2, LinkIcon } from "lucide-react";
+import { LinkIcon } from "lucide-react";
 import { type Round } from "@prisma/client";
 
 const Profile: NextPage = () => {
@@ -17,8 +17,10 @@ const Profile: NextPage = () => {
 
   const profile = api.userRouter.getUser.useQuery({ id: router.query.profile as string }, { retry: false, refetchOnWindowFocus: false, enabled: typeof router.query.profile !== "undefined" && status === "authenticated" });
 
+  const rank = api.userRouter.getUserRank.useQuery({ id: router.query.profile as string }, { retry: false, refetchOnWindowFocus: false, enabled: typeof router.query.profile !== "undefined" && status === "authenticated" });
+
   if (profile.isLoading) return <Loader />;
-  if (profile.isError) return <Error text="User not found" />;
+  if (profile.isError || !profile.data) return <Error text="User not found" />;
 
   return (
     <>
@@ -35,7 +37,7 @@ const Profile: NextPage = () => {
               <p>{profile.data?.name}</p>
               <p>{profile.data?.email}</p>
             </div>
-            <p className="py-2">Rank #10 (top 0.01%)</p>
+            <p className="py-2">Rank #{rank.data}</p>
             <Stats wins={profile.data?.wins || 0} losses={profile.data?.losses || 0} rounds={profile.data?.rounds.length || 0} />
             <ExtraDetails rounds={profile.data?.rounds || []} />
           </div>

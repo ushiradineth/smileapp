@@ -38,4 +38,14 @@ export const userRouter = createTRPCRouter({
       },
     });
   }),
+
+  getUserRank: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input, ctx }) => {
+    const users = await ctx.prisma.user.findMany({
+      orderBy: {
+        wins: "desc",
+      },
+    });
+
+    return users.findIndex(e => e.id === input.id)+1
+  }),
 });
