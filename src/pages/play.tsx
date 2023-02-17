@@ -41,7 +41,7 @@ function Play() {
         <meta name="description" content="SmileApp by Ushira Dineth" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="my-28 flex flex-col items-center gap-2 rounded-lg border p-8">
+      <main className="my-28 flex flex-col items-center gap-2 rounded-lg border p-4 md:p-8">
         <Stopwatch timer={timer} setTimer={setTimer} time={time} setTime={setTime} />
         <Image src={data?.question || DefaultBackgroundImage} className="h-auto max-h-[200px] max-w-[300px] md:object-contain md:max-w-none md:w-[500px]" width={1000} height={1000} alt={"question"} priority />
         <div className="flex gap-2">
@@ -76,7 +76,7 @@ function Stopwatch({ ...props }: { timer: boolean; setTimer: (arg0: boolean) => 
     }
     return () => clearInterval(interval);
   }, [props.timer]);
-  
+
   return (
     <div className="stopwatch">
       <div className="numbers">
