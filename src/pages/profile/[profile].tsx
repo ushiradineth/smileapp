@@ -84,7 +84,7 @@ function ExtraDetails({ ...props }: { rounds: Round[] }) {
       </div>
       <div className={`flex flex-col h-fit items-center rounded-lg border p-2 ${fastestTime === Infinity && "hidden"}`}>
         <p>Fastest round</p>
-        <Link href={props.rounds.find((e) => e.timeTaken == fastestTime)?.solutionLink || "/"}>
+        <Link href={props.rounds.find((e) => e.timeTaken == fastestTime)?.levelId || "/"}>
           <p>Time: {fastestTime}</p>
         </Link>
       </div>
