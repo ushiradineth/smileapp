@@ -1,39 +1,50 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 import Error from "../components/Error";
 import Loader from "../components/Loader";
+import { api } from "../utils/api";
 import { DefaultBackgroundImage } from "../utils/default";
-import { HeartCrack, HeartIcon, HeartPulse, Send } from "lucide-react";
+import { HeartCrack, HeartIcon, Send } from "lucide-react";
 import { useQuery } from "react-query";
 import { toast } from "react-toastify";
 
 function Play() {
+  const { data: session } = useSession();
   const [answer, setAnswer] = useState<string | null>(null);
   const [timer, setTimer] = useState(false);
   const [time, setTime] = useState(0);
   const [hearts, setHearts] = useState(3);
 
+  const setRound = api.roundRouter.setRound.useMutation({});
   const { data, error, isLoading, refetch } = useQuery("game", getGame, { refetchOnWindowFocus: false, retry: false, onSettled: () => setTimer(true) });
 
   const onWin = () => {
     (document.getElementById("Answer") as HTMLInputElement).value = "";
     toast("Answer Correct", { hideProgressBar: true, autoClose: 2000, type: "success" });
-    console.log(time);
-    setTimer(false);
-    setTime(0);
-    refetch();
-    setTimer(true);
+    setRound.mutate(
+      { userid: session?.user.id || "", question: data?.question || "", solution: data?.solution || 0, time, success: true },
+      {
+        onSuccess: () => {
+          setTimer(false);
+          setTime(0);
+          refetch();
+          setTimer(true);
+        },
+        onError: () => {
+          toast("Failed to set data", { hideProgressBar: true, autoClose: 2000, type: "error" });
+        },
+      }
+    );
   };
 
   const onLose = () => {
     toast("Answer Incorrect", { hideProgressBar: true, autoClose: 2000, type: "error" });
     if (hearts === 1) {
       setHearts(hearts - 1);
-      console.log("LOSE");
+      setRound.mutate({ userid: session?.user.id || "", question: data?.question || "", solution: data?.solution || 0, time, success: false }, { onError: () => toast("Failed to set data", { hideProgressBar: true, autoClose: 2000, type: "error" }) });
     } else if (hearts > 0) setHearts(hearts - 1);
-
-    console.log(time);
   };
 
   useEffect(() => {
@@ -42,6 +53,12 @@ function Play() {
 
   if (isLoading) return <Loader />;
   if (error) return <Error text={"Error: " + error} />;
+  if (setRound.isLoading && hearts > 0)
+    return (
+      <div className="my-40 h-[200px] w-[200px] grid place-items-center">
+        <Loader loaderOnly={true} />
+      </div>
+    );
 
   return (
     <>
@@ -82,7 +99,7 @@ function Hearts({ ...props }: { hearts: number }) {
           <HeartIcon fill="red" />
         </span>
       ))}
-      {[...Array(3-props.hearts)].map((e, i) => (
+      {[...Array(3 - props.hearts)].map((e, i) => (
         <span key={i}>
           <HeartCrack />
         </span>
