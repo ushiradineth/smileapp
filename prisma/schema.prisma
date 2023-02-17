@@ -55,28 +55,21 @@ model VerificationToken {
 }
 
 model Round {
-  id           String   @id @default(cuid())
-  solutionLink String
-  solution     Int
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       String
-  success      Boolean
-  finishedAt   DateTime @default(now()) @db.Timestamptz(3)
-  timeTaken    Float?
-
-  LevelWinsRelation    Level[] @relation("levelRounds")
-  LevelFastestRelation Level[] @relation("levelFastest")
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  level      Level    @relation(fields: [levelId], references: [id])
+  levelId    String
+  success    Boolean
+  finishedAt DateTime @default(now()) @db.Timestamptz(3)
+  timeTaken  Float?
 
   @@index([userId])
 }
 
 model Level {
-  id             String  @id @default(cuid())
-  solutionLink   String  @unique
-  solution       Int
-  rounds         Round[] @relation("levelRounds")
-  fastestRoundId String?
-  fastestRound   Round?  @relation("levelFastest", fields: [fastestRoundId], references: [id], onDelete: SetNull)
-
-  @@index([fastestRoundId])
+  id     String  @id
+  link   String  @unique
+  answer Int
+  rounds Round[]
 }
