@@ -1,11 +1,18 @@
 import React from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 import { api } from "../utils/api";
+import Loader from "../components/Loader";
+import Error from "../components/Error";
 
 function Leaderboard() {
   const router = useRouter();
-  const users = api.userRouter.getLeaderboard.useQuery({ page: Number(router.query.page) || 1 });
+  const { status } = useSession();
+  const users = api.userRouter.getLeaderboard.useQuery({ page: Number(router.query.page) || 1 }, { retry: false, refetchOnWindowFocus: false, enabled: status === "authenticated" });
+
+  if (users.isLoading) return <Loader />;
+  if (users.isError || !users.data) return <Error text="Leaderboard failed to load" />;
 
   return (
     <>
