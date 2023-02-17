@@ -70,6 +70,6 @@ model Round {
 model Level {
   id     String  @id
   link   String  @unique
-  answer Int
+  solution Int
   rounds Round[]
 }
