@@ -2,7 +2,6 @@ import { type ChangeEvent, useEffect, useRef, useState } from "react";
 import { type NextPage } from "next";
 import Head from "next/head";
 import NextImage from "next/image";
-import router from "next/router";
 import { useSession } from "next-auth/react";
 import Loader from "../components/Loader";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../components/ui/AlertboxMenu";
