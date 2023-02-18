@@ -15,6 +15,8 @@ This app has magic link login, github login, guest play, leaderboard and levelin
 - Zod
 - PostgreSQL
 - UI Primitives by [Shadcn](https://ui.shadcn.com/)
+- [Figma](https://www.figma.com/file/z7ON5TcP6j8FNbOMVhEnu6/SmileApp?node-id=0%3A1&t=VQNkqprZteGAsejS-1)
+
 
 ## Hosting
 
