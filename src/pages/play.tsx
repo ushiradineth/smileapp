@@ -13,13 +13,13 @@ import { useQuery } from "react-query";
 import { toast } from "react-toastify";
 
 function Play() {
-  const { data: session } = useSession();
+  const { data: session } = useSession();const endBtn = useRef<HTMLButtonElement>(null);
   const [answer, setAnswer] = useState<string | null>(null);
   const [timer, setTimer] = useState(false);
   const [time, setTime] = useState(0);
   const [hearts, setHearts] = useState(3);
   const [winStreak, setWinStreak] = useState(0);
-  const endBtn = useRef<HTMLButtonElement>(null);
+  
   const setRound = api.roundRouter.setRound.useMutation({});
   const { data, error, isLoading, refetch } = useQuery("game", getGame, { refetchOnWindowFocus: false, retry: false, onSettled: () => setTimer(true) });
 
