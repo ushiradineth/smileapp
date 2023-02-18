@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -19,7 +19,7 @@ function Play() {
   const [time, setTime] = useState(0);
   const [hearts, setHearts] = useState(3);
   const [winStreak, setWinStreak] = useState(0);
-
+  const endBtn = useRef<HTMLButtonElement>(null);
   const setRound = api.roundRouter.setRound.useMutation({});
   const { data, error, isLoading, refetch } = useQuery("game", getGame, { refetchOnWindowFocus: false, retry: false, onSettled: () => setTimer(true) });
 
@@ -47,6 +47,7 @@ function Play() {
     toast("Answer Incorrect", { hideProgressBar: true, autoClose: 2000, type: "error" });
     if (hearts === 1) {
       setHearts(hearts - 1);
+      endBtn.current?.click()
       setRound.mutate({ userid: session?.user.id || "", question: data?.question || "", solution: data?.solution || 0, time, success: false }, { onError: () => toast("Failed to set data", { hideProgressBar: true, autoClose: 2000, type: "error" }) });
     } else if (hearts > 0) setHearts(hearts - 1);
   };
@@ -75,7 +76,7 @@ function Play() {
         <div className="grid place-items-center grid-flow-col gap-6">
           <Hearts hearts={hearts} />
           <Stopwatch timer={timer} setTimer={setTimer} time={time} setTime={setTime} />
-          <EndMenu winStreak={winStreak} hearts={hearts} setTimer={setTimer} />
+          <EndMenu btnref={endBtn} winStreak={winStreak} hearts={hearts} setTimer={setTimer} />
         </div>
         <Image src={data?.question || DefaultBackgroundImage} className="h-auto max-h-[200px] max-w-[300px] md:object-contain md:max-w-none md:w-[500px]" width={1000} height={1000} alt={"question"} priority />
         <div className="flex gap-2">
@@ -137,12 +138,12 @@ function Stopwatch({ ...props }: { timer: boolean; setTimer: (arg0: boolean) => 
   );
 }
 
-function EndMenu({ ...props }: { winStreak: number; hearts: number; setTimer: (arg0: boolean) => void }) {
+function EndMenu({ ...props }: { winStreak: number; hearts: number; setTimer: (arg0: boolean) => void; btnref: React.RefObject<HTMLButtonElement> }) {
   const router = useRouter();
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger className="border-2 rounded-lg px-4 py-2" onClick={() => props.setTimer(false)}>
+      <AlertDialogTrigger ref={props.btnref} className="border-2 rounded-lg px-4 py-2" onClick={() => props.setTimer(false)}>
         END
       </AlertDialogTrigger>
       <AlertDialogContent>
