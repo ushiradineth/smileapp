@@ -1,3 +1,4 @@
+import { levelRouter } from "./routers/level";
 import { roundRouter } from "./routers/round";
 import { userRouter } from "./routers/user";
 import { createTRPCRouter } from "./trpc";
@@ -10,6 +11,7 @@ import { createTRPCRouter } from "./trpc";
 export const appRouter = createTRPCRouter({
   userRouter: userRouter,
   roundRouter: roundRouter,
+  levelRouter: levelRouter,
 });
 
 // export type definition of API
