@@ -100,7 +100,7 @@ async function getGame() {
   return res.json() as unknown as { question: string; solution: number };
 }
 
-function Hearts({ ...props }: { hearts: number }) {
+export function Hearts({ ...props }: { hearts: number }) {
   return (
     <div className="flex">
       {[...Array(props.hearts)].map((e, i) => (
@@ -117,7 +117,7 @@ function Hearts({ ...props }: { hearts: number }) {
   );
 }
 
-function Stopwatch({ ...props }: { timer: boolean; setTimer: (arg0: boolean) => void; time: number; setTime: any }) {
+export function Stopwatch({ ...props }: { timer: boolean; setTimer: (arg0: boolean) => void; time: number; setTime: any }) {
   useEffect(() => {
     let interval: string | number | NodeJS.Timeout | undefined;
     if (props.timer) {

@@ -9,8 +9,9 @@ import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescript
 import { AlertDialogFooter, AlertDialogHeader } from "../../components/ui/AlertboxMenu";
 import { api } from "../../utils/api";
 import { DefaultBackgroundImage } from "../../utils/default";
-import { HeartCrack, HeartIcon, Send } from "lucide-react";
+import { Send } from "lucide-react";
 import { toast } from "react-toastify";
+import { Hearts, Stopwatch } from "../play";
 
 function Level() {
   const [timer, setTimer] = useState(false);
@@ -86,45 +87,6 @@ function Level() {
 }
 
 export default Level;
-
-function Hearts({ ...props }: { hearts: number }) {
-  return (
-    <div className="flex">
-      {[...Array(props.hearts)].map((e, i) => (
-        <span key={i}>
-          <HeartIcon fill="red" />
-        </span>
-      ))}
-      {[...Array(3 - props.hearts)].map((e, i) => (
-        <span key={i}>
-          <HeartCrack />
-        </span>
-      ))}
-    </div>
-  );
-}
-
-function Stopwatch({ ...props }: { timer: boolean; setTimer: (arg0: boolean) => void; time: number; setTime: any }) {
-  useEffect(() => {
-    let interval: string | number | NodeJS.Timeout | undefined;
-    if (props.timer) {
-      interval = setInterval(() => {
-        props.setTime((prevTime: number) => prevTime + 10);
-      }, 10);
-    } else if (!props.timer) {
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
-  }, [props.timer]);
-
-  return (
-    <div className="flex items-center w-[60px]">
-      <span>{("0" + Math.floor((props.time / 60000) % 60)).slice(-2)}:</span>
-      <span>{("0" + Math.floor((props.time / 1000) % 60)).slice(-2)}:</span>
-      <span>{("0" + ((props.time / 10) % 100)).slice(-2)}</span>
-    </div>
-  );
-}
 
 function EndMenu({ ...props }: { hearts: number; time: number; setTimer: (arg0: boolean) => void; btnref: React.RefObject<HTMLButtonElement> }) {
   const router = useRouter();
