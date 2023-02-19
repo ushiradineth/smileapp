@@ -25,7 +25,7 @@ module.exports = {
       },
     },
     fontFamily: {
-      cal: ['Cal Sans']
+      cal: ['var(--font-cal)']
     }
   },
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

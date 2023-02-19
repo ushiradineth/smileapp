@@ -8,6 +8,16 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { AiFillCaretDown, AiFillGithub, AiFillLinkedin } from "react-icons/ai";
 import { MdOutlineLeaderboard } from "react-icons/md";
 import { Gamepad2, Github, LogIn, LogOut, Settings, User } from "lucide-react";
+import localFont from "@next/font/local";
+
+const CalSans = localFont({
+  src: [
+    {
+      path: "../../public/CalSans-SemiBold.ttf",
+    },
+  ],
+  variable: "--font-cal",
+});
 
 export default function Layout({ children }: { children: ReactNode }) {
   const { data: session, status } = useSession();
@@ -25,7 +35,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   return (
     <main className="flex justify-center h-full relative">
-      <div id="container" className="font-cal min-h-screen w-full flex flex-col items-center">
+      <div id="container" className={`font-cal min-h-screen w-full flex flex-col items-center ${CalSans.variable}`}>
         <div id="navbar" className="border-b bg-white text-black w-full h-fit pt-[25px] pb-[25px] flex items-center px-4 md:px-10 gap-4 md:gap-8 relative max-w-[1024px]">
           <Link href={"/"} className="z-10">
             <Image src="/logo-black.png" height={70} width={120} className="w-24 md:w-full" alt={"logo"} priority />
