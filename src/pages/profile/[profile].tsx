@@ -8,6 +8,7 @@ import Error from "../../components/Error";
 import Loader from "../../components/Loader";
 import { api } from "../../utils/api";
 import { DefaultUserImage } from "../../utils/default";
+import { WinRateBar } from "../leaderboard";
 import { LinkIcon } from "lucide-react";
 import { type Round } from "@prisma/client";
 
@@ -31,14 +32,14 @@ const Profile: NextPage = () => {
       </Head>
       <main>
         <div className="w-full flex mb-20">
-          <div className="flex flex-col items-center border-2 h-fit my-10 p-8 rounded-sm">
+          <div className="flex flex-col items-center border-2 h-fit my-10 p-8 rounded-sm gap-2">
             <Image src={profile.data?.image || DefaultUserImage} className={"rounded-full"} height={200} width={200} alt={"User Image"} />
-            <div className="flex flex-col items-center py-2">
+            <div className="flex flex-col items-center">
               <p>{profile.data?.name}</p>
               <p>{profile.data?.email}</p>
             </div>
-            <p className="py-2">Rank #{rank.data}</p>
-            <Stats wins={profile.data?.wins || 0} losses={profile.data?.losses || 0} rounds={profile.data?.rounds.length || 0} />
+            <p>Rank #{rank.data}</p>
+            <WinRateBar wins={profile.data?.wins || 0} losses={profile.data?.losses || 0} classList={"mb-2"} />
             <ExtraDetails rounds={profile.data?.rounds || []} />
           </div>
         </div>
@@ -46,25 +47,6 @@ const Profile: NextPage = () => {
     </>
   );
 };
-
-function Stats({ ...props }: { wins: number; losses: number; rounds: number }) {
-  const winRate = Math.round((props.wins / (props.wins + props.losses)) * 100);
-
-  return (
-    <>
-      <div className="mb-2">
-        <div className={`absolute rounded-sm h-4 w-[${winRate}px] bg-blue-300`}></div>
-        <div className={"rounded-sm h-4 w-[100px] bg-red-300"}></div>
-      </div>
-      <div className="flex gap-2">
-        <p>{props.rounds} Rounds</p>
-        <p>{props.wins} Wins</p>
-        <p>{props.losses} Losses</p>
-      </div>
-      <p>{Number.isNaN(winRate) ? "0" : winRate}% Win Rate</p>
-    </>
-  );
-}
 
 function ExtraDetails({ ...props }: { rounds: Round[] }) {
   let weekGameTime = 0;
