@@ -9,9 +9,9 @@ import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescript
 import { AlertDialogFooter, AlertDialogHeader } from "../../components/ui/AlertboxMenu";
 import { api } from "../../utils/api";
 import { DefaultBackgroundImage } from "../../utils/default";
+import { Hearts, Stopwatch } from "../play";
 import { Send } from "lucide-react";
 import { toast } from "react-toastify";
-import { Hearts, Stopwatch } from "../play";
 
 function Level() {
   const [timer, setTimer] = useState(false);
@@ -23,7 +23,7 @@ function Level() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  const level = api.levelRouter.getLevel.useQuery({ levelid: router.query.level as string }, { retry: false, refetchOnWindowFocus: false, enabled: typeof router.query.level !== "undefined" && status === "authenticated", onSettled: () => setTimer(true) });
+  const [level, user] = api.useQueries((t) => [t.levelRouter.getLevel({ levelid: router.query.level as string }, { retry: false, refetchOnWindowFocus: false, enabled: typeof router.query.level !== "undefined" && status === "authenticated", onSettled: () => setTimer(true) }), t.userRouter.getUser({ id: session?.user.id || "" }, { retry: false, refetchOnWindowFocus: false, enabled: status === "authenticated" })]);
 
   const onWin = () => {
     (document.getElementById("Answer") as HTMLInputElement).value = "";
@@ -58,7 +58,8 @@ function Level() {
 
   if (level.isLoading) return <Loader />;
   if (level.error) return <Error text={"Error: " + level.error} />;
-
+  if (user.data?.rounds.find((l) => l.levelId === level.data?.id)) return <Error text={"You have already attempted this level"} />;
+  
   return (
     <>
       <Head>
@@ -101,7 +102,7 @@ function EndMenu({ ...props }: { hearts: number; time: number; setTimer: (arg0: 
           <AlertDialogTitle>Well done!</AlertDialogTitle>
           <AlertDialogDescription>
             <div>
-              <p>Time taken: {props.time/1000}</p>
+              <p>Time taken: {props.time / 1000}</p>
               <p>Hearts Lost: {3 - props.hearts}</p>
             </div>
           </AlertDialogDescription>
