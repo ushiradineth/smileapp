@@ -84,7 +84,7 @@ function Leaderboard() {
 
 export default Leaderboard;
 
-const WinRateBar = ({ ...props }: { wins: number; losses: number; classList?: string }) => {
+export const WinRateBar = ({ ...props }: { wins: number; losses: number; classList?: string }) => {
   const winRate = Math.round((props.wins / (props.wins + props.losses)) * 100);
 
   return (
