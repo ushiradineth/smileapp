@@ -23,7 +23,7 @@ function Level() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  const [level, user] = api.useQueries((t) => [t.levelRouter.getLevel({ levelid: router.query.level as string }, { retry: false, refetchOnWindowFocus: false, enabled: typeof router.query.level !== "undefined" && status === "authenticated", onSettled: () => setTimer(true) }), t.userRouter.getUser({ id: session?.user.id || "" }, { retry: false, refetchOnWindowFocus: false, enabled: status === "authenticated" })]);
+  const [level, user] = api.useQueries((t) => [t.levelRouter.getLevel({ levelid: router.query.level as string }, { retry: false, refetchOnWindowFocus: false, enabled: typeof router.query.level !== "undefined" && status === "authenticated" }), t.userRouter.getUser({ id: session?.user.id || "" }, { retry: false, refetchOnWindowFocus: false, enabled: status === "authenticated" })]);
 
   const onWin = () => {
     (document.getElementById("Answer") as HTMLInputElement).value = "";
@@ -59,7 +59,7 @@ function Level() {
   if (level.isLoading) return <Loader />;
   if (level.error) return <Error text={"Error: " + level.error} />;
   if (user.data?.rounds.find((l) => l.levelId === level.data?.id)) return <Error text={"You have already attempted this level"} />;
-  
+
   return (
     <>
       <Head>
@@ -73,7 +73,7 @@ function Level() {
           <Stopwatch timer={timer} setTimer={setTimer} time={time} setTime={setTime} />
           <EndMenu btnref={endBtn} hearts={hearts} time={time} setTimer={setTimer} />
         </div>
-        <Image src={level.data?.link || DefaultBackgroundImage} className="h-auto max-h-[200px] max-w-[300px] md:object-contain md:max-w-none md:w-[500px]" width={1000} height={1000} alt={"question"} priority />
+        <Image src={level.data?.link || DefaultBackgroundImage} onLoad={() => setTimer(true)} className="h-auto max-h-[200px] max-w-[300px] md:object-contain md:max-w-none md:w-[500px]" width={1000} height={1000} alt={"question"} priority />
         <div className="flex gap-2">
           <div className={"flex h-[35px] items-center justify-start gap-2 rounded-lg px-4 border"}>
             <input onChange={(e) => setAnswer(e.currentTarget.value)} placeholder="Enter your answer" autoComplete="off" type="number" id={"Answer"} className={"h-full placeholder:text-gray-500 focus:outline-none"} />

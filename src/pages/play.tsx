@@ -20,9 +20,9 @@ function Play() {
   const [hearts, setHearts] = useState(3);
   const [winStreak, setWinStreak] = useState(0);
   const endBtn = useRef<HTMLButtonElement>(null);
-  
+
   const setRound = api.roundRouter.setRound.useMutation({});
-  const { data, error, isLoading, refetch } = useQuery("game", getGame, { refetchOnWindowFocus: false, retry: false, onSettled: () => setTimer(true) });
+  const { data, error, isLoading, refetch } = useQuery("game", getGame, { refetchOnWindowFocus: false, retry: false });
 
   const onWin = () => {
     (document.getElementById("Answer") as HTMLInputElement).value = "";
@@ -48,7 +48,7 @@ function Play() {
     toast("Answer Incorrect", { hideProgressBar: true, autoClose: 2000, type: "error" });
     if (hearts === 1) {
       setHearts(hearts - 1);
-      endBtn.current?.click()
+      endBtn.current?.click();
       setRound.mutate({ userid: session?.user.id || "", question: data?.question || "", solution: data?.solution || 0, time, success: false }, { onError: () => toast("Failed to set data", { hideProgressBar: true, autoClose: 2000, type: "error" }) });
     } else if (hearts > 0) setHearts(hearts - 1);
   };
@@ -79,7 +79,7 @@ function Play() {
           <Stopwatch timer={timer} setTimer={setTimer} time={time} setTime={setTime} />
           <EndMenu btnref={endBtn} winStreak={winStreak} hearts={hearts} setTimer={setTimer} />
         </div>
-        <Image src={data?.question || DefaultBackgroundImage} className="h-auto max-h-[200px] max-w-[300px] md:object-contain md:max-w-none md:w-[500px]" width={1000} height={1000} alt={"question"} priority />
+        <Image src={data?.question || DefaultBackgroundImage} onLoad={() => setTimer(true)} className="h-auto max-h-[200px] max-w-[300px] md:object-contain md:max-w-none md:w-[500px]" width={1000} height={1000} alt={"question"} priority />
         <div className="flex gap-2">
           <div className={"flex h-[35px] items-center justify-start gap-2 rounded-lg px-4 border"}>
             <input onChange={(e) => setAnswer(e.currentTarget.value)} placeholder="Enter your answer" autoComplete="off" type="number" id={"Answer"} className={"h-full placeholder:text-gray-500 focus:outline-none"} />
