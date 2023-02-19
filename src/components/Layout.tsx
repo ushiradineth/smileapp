@@ -10,7 +10,7 @@ import { MdOutlineLeaderboard } from "react-icons/md";
 import { Dices, Gamepad2, Github, LogIn, LogOut, Settings, User } from "lucide-react";
 import localFont from "@next/font/local";
 
-const CalSans = localFont({
+export const CalSans = localFont({
   src: [
     {
       path: "../../public/CalSans-SemiBold.ttf",
