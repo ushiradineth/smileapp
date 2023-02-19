@@ -75,7 +75,7 @@ function Levels() {
                     <td className="text-center py-1 md:pt-3 truncate">{userRecord ? <p>{(userRecord.timeTaken || 0) / 1000}s</p> : <p>NAY</p>}</td>
                     <td className="text-center py-1 md:pt-3 truncate">
                       {
-                        <button disabled={Boolean(userRecord)} onClick={() => router.push("/level/" + level.id)} className="p-2 rounded-lg bg-black text-white disabled:bg-zinc-400">
+                        <button disabled={Boolean(userRecord)} onClick={() => router.push("/levels/" + level.id)} className="p-2 rounded-lg bg-black text-white disabled:bg-zinc-400">
                           Play
                         </button>
                       }
