@@ -7,7 +7,7 @@ import Loader from "./Loader";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/DropdownMenu";
 import { AiFillCaretDown, AiFillGithub, AiFillLinkedin } from "react-icons/ai";
 import { MdOutlineLeaderboard } from "react-icons/md";
-import { Gamepad2, Github, LogIn, LogOut, Settings, User } from "lucide-react";
+import { Dices, Gamepad2, Github, LogIn, LogOut, Settings, User } from "lucide-react";
 import localFont from "@next/font/local";
 
 const CalSans = localFont({
@@ -51,6 +51,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="mr-4 md:mr-10">
                 <LinkItem link="/play" icon={<Gamepad2 className="h-4 w-4" />} title="Play" hidden={status === "unauthenticated"} />
+                <LinkItem link="/levels" icon={<Dices className="h-4 w-4" />} title="Levels" hidden={status === "unauthenticated"} />
                 <LinkItem link="/leaderboard" icon={<MdOutlineLeaderboard className="h-4 w-4" />} title="Leaderboard" hidden={status === "unauthenticated"} />
                 <DropdownMenuSeparator className={`${status === "unauthenticated" ? "hidden" : ""}`} />
                 <LinkItem link={`/profile/${session?.user.id}`} icon={<User className="h-4 w-4" />} title="Profile" hidden={status === "unauthenticated"} />
