@@ -30,7 +30,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     return () => router.events.off("routeChangeStart", closeMenu);
   }, [router.events]);
 
-  if (status === "unauthenticated" && router.pathname !== "/") router.push("/");
+  if (status === "unauthenticated" && router.pathname !== "/" && router.pathname !== "/guest") router.push("/");
   if (status === "loading") return <Loader />;
 
   return (
@@ -53,6 +53,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                 <LinkItem link="/play" icon={<Gamepad2 className="h-4 w-4" />} title="Play" hidden={status === "unauthenticated"} />
                 <LinkItem link="/levels" icon={<Dices className="h-4 w-4" />} title="Levels" hidden={status === "unauthenticated"} />
                 <LinkItem link="/leaderboard" icon={<MdOutlineLeaderboard className="h-4 w-4" />} title="Leaderboard" hidden={status === "unauthenticated"} />
+                <LinkItem link="/guest" icon={<Gamepad2 className="h-4 w-4" />} title="Guest Play" hidden={status === "authenticated"} />
                 <DropdownMenuSeparator className={`${status === "unauthenticated" ? "hidden" : ""}`} />
                 <LinkItem link={`/profile/${session?.user.id}`} icon={<User className="h-4 w-4" />} title="Profile" hidden={status === "unauthenticated"} />
                 <LinkItem link="/settings" icon={<Settings className="h-4 w-4" />} title="Settings" hidden={status === "unauthenticated"} />

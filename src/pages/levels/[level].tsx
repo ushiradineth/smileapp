@@ -101,8 +101,10 @@ function EndMenu({ ...props }: { hearts: number; time: number; setTimer: (arg0: 
         <AlertDialogHeader>
           <AlertDialogTitle>Well done!</AlertDialogTitle>
           <AlertDialogDescription>
-              <p>Time taken: {props.time / 1000}</p>
-              <p>Hearts Lost: {3 - props.hearts}</p>
+            <span className="flex flex-col">
+              <span>Time taken: {props.time / 1000}</span>
+              <span>Hearts Lost: {3 - props.hearts}</span>
+            </span>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

@@ -136,8 +136,10 @@ function EndMenu({ ...props }: { winStreak: number; hearts: number; setTimer: (a
         <AlertDialogHeader>
           <AlertDialogTitle>Well done!</AlertDialogTitle>
           <AlertDialogDescription>
-              <p>Wins: {props.winStreak}</p>
-              <p>Hearts Lost: {3 - props.hearts}</p>
+            <span className="flex flex-col">
+              <span>Wins: {props.winStreak}</span>
+              <span>Hearts Lost: {3 - props.hearts}</span>
+            </span>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
