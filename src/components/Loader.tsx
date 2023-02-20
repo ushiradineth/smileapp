@@ -1,7 +1,10 @@
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { CalSans } from "./Layout";
 
 export default function Loader({ ...props }: { loaderOnly?: boolean }) {
+  const { status } = useSession()
+
   if (props.loaderOnly) {
     return (
       <svg aria-hidden="true" className={`h-8 w-full fill-black animate-spin text-gray-200`} viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -18,7 +21,7 @@ export default function Loader({ ...props }: { loaderOnly?: boolean }) {
         <meta name="description" content="SmileApp by Ushira Dineth" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={`flex font-cal flex-col items-center justify-center mb-40 min-w-screen min-h-screen ${CalSans.variable}`}>
+      <main className={`flex font-cal flex-col items-center justify-center ${CalSans.variable}` + (status === "loading" ? " h-screen " : " my-60 ")}>
         <p className="h-8 w-16 animate-spin fill-pink-200 text-black dark:text-gray-600 absolute">{"["}</p>
         <p>SMILE</p>
       </main>
