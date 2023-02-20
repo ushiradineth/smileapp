@@ -44,10 +44,6 @@ function Play() {
     } else if (hearts > 0) setHearts(hearts - 1);
   };
 
-  useEffect(() => {
-    console.log(data?.solution);
-  }, [data?.solution]);
-
   if (isLoading) return <Loader />;
   if (error) return <Error text={"Error: " + error} />;
 

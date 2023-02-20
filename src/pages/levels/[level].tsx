@@ -52,10 +52,6 @@ function Level() {
     } else if (hearts > 0) setHearts(hearts - 1);
   };
 
-  useEffect(() => {
-    console.log(level.data?.solution);
-  }, [level.data?.solution]);
-
   if (level.isLoading) return <Loader />;
   if (level.error) return <Error text={"Error: " + level.error} />;
   if (user.data?.rounds.find((l) => l.levelId === level.data?.id)) return <Error text={"You have already attempted this level"} />;
