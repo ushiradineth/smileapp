@@ -98,7 +98,7 @@ const Settings: NextPage = () => {
             <div className={"flex h-[35px] items-center justify-start gap-2 rounded-lg px-4 border"}>
               <input onChange={(e) => handleInputChange(e)} defaultValue={session.user.name || ""} placeholder="Name" autoComplete="off" type="text" id={"Name"} className={"h-full placeholder:text-gray-500 focus:outline-none"} maxLength={50} minLength={1}></input>
             </div>
-            <button disabled={!edited || updateImage.isLoading || updateName.isLoading} onClick={() => onSave()} className="h-12 w-24 cursor-pointer rounded-2xl disabled:cursor-not-allowed bg-blue-500 disabled:bg-blue-300 disabled:text-gray-700 text-gray-100">
+            <button disabled={!edited || updateImage.isLoading || updateName.isLoading} onClick={() => onSave()} className="h-12 w-24 cursor-pointer rounded-2xl disabled:cursor-not-allowed bg-gray-900 disabled:bg-gray-300 disabled:text-gray-700 text-gray-100">
               {updateImage.isLoading || updateName.isLoading ? <Loader loaderOnly={true} /> : "Save"}
             </button>
           </div>
@@ -122,7 +122,7 @@ function DeleteMenu({ ...props }: { userID: string; btnref: React.RefObject<HTML
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger ref={props.btnref} disabled={props.disabled} className="h-12 px-8 cursor-pointer rounded-2xl disabled:cursor-not-allowed bg-red-400 disabled:bg-red-300 text-gray-100">
+      <AlertDialogTrigger ref={props.btnref} disabled={props.disabled} className="h-12 px-8 cursor-pointer rounded-2xl disabled:cursor-not-allowed bg-gray-900 disabled:bg-gray-300 text-gray-100">
         Delete Account
       </AlertDialogTrigger>
       <AlertDialogContent>
