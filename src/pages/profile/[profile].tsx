@@ -16,12 +16,10 @@ const Profile: NextPage = () => {
   const { status } = useSession();
   const router = useRouter();
 
-  const profile = api.userRouter.getUser.useQuery({ id: router.query.profile as string }, { retry: false, refetchOnWindowFocus: false, enabled: typeof router.query.profile !== "undefined" && status === "authenticated" });
+  const [profile, rank] = api.useQueries((t) => [t.userRouter.getUser({ id: router.query.profile as string }, { retry: false, refetchOnWindowFocus: false, enabled: typeof router.query.profile !== "undefined" && status === "authenticated" }), t.userRouter.getUserRank({ id: router.query.profile as string }, { retry: false, refetchOnWindowFocus: false, enabled: typeof router.query.profile !== "undefined" && status === "authenticated" })]);
 
-  const rank = api.userRouter.getUserRank.useQuery({ id: router.query.profile as string }, { retry: false, refetchOnWindowFocus: false, enabled: typeof router.query.profile !== "undefined" && status === "authenticated" });
-
-  if (profile.isLoading) return <Loader />;
-  if (profile.isError || !profile.data) return <Error text="User not found" />;
+  if (profile.isLoading || rank.isLoading) return <Loader />;
+  if (profile.isError || !profile.data || rank.isError || !rank.data) return <Error text="Data not found" />;
 
   return (
     <>
