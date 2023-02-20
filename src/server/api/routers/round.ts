@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const roundRouter = createTRPCRouter({
   setRound: protectedProcedure.input(z.object({ userid: z.string(), question: z.string().url(), solution: z.number(), time: z.number(), success: z.boolean() })).mutation(async ({ input, ctx }) => {
-    let level = await ctx.prisma.level.findUnique({ where: { id: input.question } });
+    let level = await ctx.prisma.level.findUnique({ where: { id: input.question.split("/")[6]?.split(".png")[0] || input.question } });
 
     if (!level) {
       level = await ctx.prisma.level.create({
