@@ -60,6 +60,7 @@ function Levels() {
                 const wins = level.rounds.filter((e) => e.success);
                 const losses = level.rounds.filter((e) => !e.success);
                 const userRecord = user.data?.rounds.find((l) => l.levelId === level.id);
+                const userRecordInfo = userRecord ? userRecord.success ? <p>{(userRecord.timeTaken || 0) / 1000}s</p> : <p>DNF</p> : <p>NAY</p>;
 
                 return (
                   <tr key={(page - 1) * indexing + index + 1} className="bg-white border-b">
@@ -72,7 +73,7 @@ function Levels() {
                     <td className="text-center py-1 md:pt-3 md:flex md:justify-center">
                       <WinRateBar wins={wins.length} losses={losses.length} classList={"md:mt-2"} />
                     </td>
-                    <td className="text-center py-1 md:pt-3 truncate">{userRecord ? <p>{(userRecord.timeTaken || 0) / 1000}s</p> : <p>NAY</p>}</td>
+                    <td className="text-center py-1 md:pt-3 truncate">{userRecordInfo}</td>
                     <td className="text-center py-1 md:pt-3 truncate">
                       {
                         <button disabled={Boolean(userRecord)} onClick={() => router.push("/levels/" + level.id)} className="p-2 rounded-lg bg-black text-white disabled:bg-zinc-400">
