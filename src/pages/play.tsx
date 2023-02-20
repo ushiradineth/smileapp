@@ -50,12 +50,6 @@ function Play() {
 
   if (isLoading) return <Loader />;
   if (error) return <Error text={"Error: " + error} />;
-  if (setRound.isLoading && hearts > 0)
-    return (
-      <div className="my-40 h-[200px] w-[200px] grid place-items-center">
-        <Loader loaderOnly={true} />
-      </div>
-    );
 
   return (
     <>
@@ -142,10 +136,8 @@ function EndMenu({ ...props }: { winStreak: number; hearts: number; setTimer: (a
         <AlertDialogHeader>
           <AlertDialogTitle>Well done!</AlertDialogTitle>
           <AlertDialogDescription>
-            <div className="">
               <p>Wins: {props.winStreak}</p>
               <p>Hearts Lost: {3 - props.hearts}</p>
-            </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
