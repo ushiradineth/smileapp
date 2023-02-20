@@ -1,6 +1,8 @@
 import { type ReactNode } from "react";
 import { type NextPage } from "next";
 import Head from "next/head";
+import Image from "next/image";
+import { DefaultBackgroundImage } from "../utils/default";
 
 const Index: NextPage = () => {
   return (
@@ -13,15 +15,17 @@ const Index: NextPage = () => {
       <main className="mb-40">
         <Block>
           <Details title="TEST YOUR INTELECT WITH THIS SIMPLE AND FUN GAME" description="Simple, easy and interactive gameplay" />
-          <Placeholder />
+          <Placeholder image={"/1.png"} />
         </Block>
         <Block reverse={true}>
-          <Placeholder />
+          <Placeholder image={"/2.png"} />
           <Details title="TRACK YOUR PERSONAL PERFORMANCE" description="Insights on your ups and downs" textRight={true} />
         </Block>
         <Block>
           <Details title="COMPETE WITH YOUR FRIENDS" description="See who can rank higher in the Leaderboard" />
-          <Placeholder />
+          <div className="border-2 rounded">
+            <Placeholder image={"/3.png"} />
+          </div>
         </Block>
       </main>
     </>
@@ -41,14 +45,11 @@ function Details(props: { title: string; description: string; textRight?: boolea
   );
 }
 
-function Placeholder() {
+function Placeholder({ ...props }: { image: string }) {
   return (
-    <>
-      <div className="h-[250px] lg:h-[400px] aspect-square bg-zinc-500 grid place-items-center">
-        <p className="text-[12px] lg:text-[24px]">PLACEHOLDER FOR IMAGE</p>
-      </div>
-      {/* <Image src="/logo-black.png" height={400} width={400} alt="placeholder" /> */}
-    </>
+    <div className="h-[250px] lg:h-[400px] aspect-square grid place-items-center">
+      <Image src={props.image || DefaultBackgroundImage} height={400} width={400} alt="placeholder" />
+    </div>
   );
 }
 
