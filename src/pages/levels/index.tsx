@@ -109,13 +109,13 @@ const WinRateBar = ({ ...props }: { wins: number; losses: number; classList?: st
 
   return (
     <div className={props.classList + " text-[8px]"}>
-      <div className={"text-gray-500 text-center absolute z-20 rounded-sm h-4 w-[50px] md:w-[100px] flex justify-evenly items-center mt-[2px]"}>
+      <div className={"text-gray-500 text-center absolute z-20 rounded-sm h-4 w-[100px] flex justify-evenly items-center mt-[2px]"}>
         <p className="truncate">{props.wins}W</p>
         <p className="truncate">{Number.isNaN(winRate) ? "0" : winRate}%</p>
         <p className="truncate">{props.losses}L</p>
       </div>
-      <div className={"absolute z-10 rounded-sm bg-blue-300 h-4 w-[" + (winRate / 2).toString() + "px] " + "md:w-[" + winRate.toString() + "px]"}></div>
-      <div className={"rounded-sm h-4 w-[50px] md:w-[100px] bg-red-300 grid grid-flow-col place-content-stretch"} />
+      <div className={"absolute z-10 rounded-sm bg-blue-300 h-4"} style={{ width: winRate }}></div>
+      <div className={"rounded-sm h-4 w-[100px] bg-red-300 grid grid-flow-col place-content-stretch"} />
     </div>
   );
 };

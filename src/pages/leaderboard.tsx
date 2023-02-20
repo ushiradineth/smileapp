@@ -86,6 +86,8 @@ export default Leaderboard;
 
 export const WinRateBar = ({ ...props }: { wins: number; losses: number; classList?: string }) => {
   const winRate = Math.round((props.wins / (props.wins + props.losses)) * 100);
+  console.log(winRate);
+  
 
   return (
     <div className={props.classList}>
@@ -94,7 +96,7 @@ export const WinRateBar = ({ ...props }: { wins: number; losses: number; classLi
         <p className="truncate">{Number.isNaN(winRate) ? "0" : winRate}%</p>
         <p className="truncate">{props.losses}L</p>
       </div>
-      <div className={"absolute z-10 rounded-sm bg-blue-300 h-4 w-[" + winRate.toString() + "px]"}></div>
+      <div className={"absolute z-10 rounded-sm bg-blue-300 h-4"} style={{ 'width': winRate }}></div>
       <div className={"rounded-sm h-4 w-[100px] text-[10px] bg-red-300 grid grid-flow-col place-content-stretch"} />
     </div>
   );
