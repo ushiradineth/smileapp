@@ -45,10 +45,10 @@ function Level() {
 
   const onLose = () => {
     toast("Answer Incorrect", { hideProgressBar: true, autoClose: 2000, type: "error" });
+    setRound.mutate({ userid: session?.user.id || "", question: level.data?.link || "", solution: level.data?.solution || 0, time, success: false }, { onError: () => toast("Failed to set data", { hideProgressBar: true, autoClose: 2000, type: "error" }) });
     if (hearts === 1) {
       setHearts(hearts - 1);
       endBtn.current?.click();
-      setRound.mutate({ userid: session?.user.id || "", question: level.data?.link || "", solution: level.data?.solution || 0, time, success: false }, { onError: () => toast("Failed to set data", { hideProgressBar: true, autoClose: 2000, type: "error" }) });
     } else if (hearts > 0) setHearts(hearts - 1);
   };
 

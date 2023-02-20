@@ -28,28 +28,19 @@ function Play() {
     (document.getElementById("Answer") as HTMLInputElement).value = "";
     toast("Answer Correct", { hideProgressBar: true, autoClose: 2000, type: "success" });
     setWinStreak(winStreak + 1);
-    setRound.mutate(
-      { userid: session?.user.id || "", question: data?.question || "", solution: data?.solution || 0, time, success: true },
-      {
-        onSuccess: () => {
-          setTimer(false);
-          setTime(0);
-          refetch();
-          setTimer(true);
-        },
-        onError: () => {
-          toast("Failed to set data", { hideProgressBar: true, autoClose: 2000, type: "error" });
-        },
-      }
-    );
+    setRound.mutate({ userid: session?.user.id || "", question: data?.question || "", solution: data?.solution || 0, time, success: true }, { onError: () => toast("Failed to set data", { hideProgressBar: true, autoClose: 2000, type: "error" }) });
+    setTimer(false);
+    setTime(0);
+    refetch();
+    setTimer(true);
   };
 
   const onLose = () => {
     toast("Answer Incorrect", { hideProgressBar: true, autoClose: 2000, type: "error" });
+    setRound.mutate({ userid: session?.user.id || "", question: data?.question || "", solution: data?.solution || 0, time, success: false }, { onError: () => toast("Failed to set data", { hideProgressBar: true, autoClose: 2000, type: "error" }) });
     if (hearts === 1) {
       setHearts(hearts - 1);
       endBtn.current?.click();
-      setRound.mutate({ userid: session?.user.id || "", question: data?.question || "", solution: data?.solution || 0, time, success: false }, { onError: () => toast("Failed to set data", { hideProgressBar: true, autoClose: 2000, type: "error" }) });
     } else if (hearts > 0) setHearts(hearts - 1);
   };
 
