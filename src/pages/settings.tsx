@@ -2,6 +2,7 @@ import { type ChangeEvent, useEffect, useRef, useState } from "react";
 import { type NextPage } from "next";
 import Head from "next/head";
 import NextImage from "next/image";
+import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import Loader from "../components/Loader";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../components/ui/AlertboxMenu";
@@ -13,6 +14,7 @@ import { toast } from "react-toastify";
 
 const Settings: NextPage = () => {
   const { data: session } = useSession();
+  const router = useRouter();
   const [name, setName] = useState(session?.user.name || "");
   const imageRef = useRef<HTMLInputElement | null>(null);
   const [image, setImage] = useState<File>();
@@ -98,6 +100,7 @@ const Settings: NextPage = () => {
             <div className={"flex h-[35px] items-center justify-start gap-2 rounded-lg px-4 border"}>
               <input onChange={(e) => handleInputChange(e)} defaultValue={session.user.name || ""} placeholder="Name" autoComplete="off" type="text" id={"Name"} className={"h-full placeholder:text-gray-500 focus:outline-none"} maxLength={50} minLength={1}></input>
             </div>
+            {router.query.setName && <p className="text-red-500">Set your name before continuing</p>}
             <button disabled={!edited || updateImage.isLoading || updateName.isLoading} onClick={() => onSave()} className="h-12 w-24 cursor-pointer rounded-2xl disabled:cursor-not-allowed bg-gray-900 disabled:bg-gray-300 disabled:text-gray-700 text-gray-100">
               {updateImage.isLoading || updateName.isLoading ? <Loader loaderOnly={true} /> : "Save"}
             </button>
@@ -131,7 +134,12 @@ function DeleteMenu({ ...props }: { userID: string; btnref: React.RefObject<HTML
           <AlertDialogDescription>This action cannot be undone. This will permanently delete your account and remove your data from our servers.</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction onClick={(e) => { e.preventDefault(); deleteUser.mutate({ id: props.userID }); }}>
+          <AlertDialogAction
+            onClick={(e) => {
+              e.preventDefault();
+              deleteUser.mutate({ id: props.userID });
+            }}
+          >
             {deleteUser.isLoading ? <Loader loaderOnly={true} /> : "Delete Account"}
           </AlertDialogAction>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
