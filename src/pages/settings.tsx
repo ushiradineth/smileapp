@@ -58,7 +58,7 @@ const Settings: NextPage = () => {
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (Boolean(e.target.value !== session?.user.name) !== edited) setEdited(e.target.value !== session?.user.name);
+    if (Boolean(e.target.value !== session?.user.name && e.target.value !== "") !== edited) setEdited(e.target.value !== session?.user.name && e.target.value !== "");
     setName(e.target.value);
   };
 
