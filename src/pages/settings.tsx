@@ -54,7 +54,13 @@ const Settings: NextPage = () => {
       else updateImage.mutate({ id: session?.user?.id || "", image: `${env.NEXT_PUBLIC_SUPABASE_IMAGE_URL}Users/${session?.user.id}/ProfilePicture` });
     }
 
-    if (name !== session?.user.name) updateName.mutate({ id: session?.user?.id || "", name });
+    if (name !== session?.user.name)
+      updateName.mutate(
+        { id: session?.user?.id || "", name },
+        {
+          onSuccess: () => router.query.setName && router.push("/?initial=true"),
+        }
+      );
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {

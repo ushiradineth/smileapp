@@ -32,7 +32,10 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   if (status === "unauthenticated" && router.pathname !== "/" && router.pathname !== "/guest") router.push("/");
   if (status === "loading") return <Loader />;
-  if (session?.user.name === "name" && router.pathname !== "/settings") router.push("/settings?setName=true")
+  if (router.query.initial) {
+    location.reload();
+    router.push("/");
+  } else if (session?.user.name === "name" && router.pathname !== "/settings") router.push("/settings?setName=true");
 
   return (
     <main className="flex justify-center h-full relative">
