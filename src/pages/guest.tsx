@@ -2,15 +2,15 @@ import React, { useRef, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Error from "../components/Error";
 import Loader from "../components/Loader";
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../components/ui/AlertboxMenu";
 import { DefaultBackgroundImage } from "../utils/default";
+import { Hearts, Stopwatch } from "./play";
 import { Send } from "lucide-react";
 import { useQuery } from "react-query";
 import { toast } from "react-toastify";
-import { Hearts, Stopwatch } from "./play";
 
 function Guest() {
   const [answer, setAnswer] = useState<string | null>(null);
@@ -19,8 +19,12 @@ function Guest() {
   const [hearts, setHearts] = useState(3);
   const [winStreak, setWinStreak] = useState(0);
   const endBtn = useRef<HTMLButtonElement>(null);
+  const { status } = useSession();
+  const router = useRouter();
 
-  const { data, error, isLoading, refetch } = useQuery("game", getGame, { refetchOnWindowFocus: false, retry: false });
+  status === "authenticated" && router.push("/");
+
+  const { data, error, isLoading, refetch } = useQuery("game", getGame, { refetchOnWindowFocus: false, retry: false, enabled: status === "unauthenticated" });
 
   const onWin = () => {
     (document.getElementById("Answer") as HTMLInputElement).value = "";
@@ -40,7 +44,7 @@ function Guest() {
     } else if (hearts > 0) setHearts(hearts - 1);
   };
 
-  if (isLoading) return <Loader />;
+  if (isLoading || status === "loading") return <Loader />;
   if (error) return <Error text={"Error: " + error} />;
 
   return (
