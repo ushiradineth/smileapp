@@ -55,13 +55,14 @@ function Play() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="mt-28 mb-60 flex flex-col items-center gap-2 rounded-lg border px-1 py-8">
-        <div className="grid place-items-center grid-flow-col gap-6">
+        <Stopwatch timer={timer} setTimer={setTimer} time={time} setTime={setTime} />
+        <div className="grid place-items-center grid-flow-col gap-8 md:gap-16">
           <Hearts hearts={hearts} />
-          <Stopwatch timer={timer} setTimer={setTimer} time={time} setTime={setTime} />
+          <p>Score: {winStreak}</p>
           <EndMenu btnref={endBtn} winStreak={winStreak} hearts={hearts} setTimer={setTimer} />
         </div>
         <Image src={data?.question || DefaultBackgroundImage} onLoad={() => setTimer(true)} className="h-auto max-h-[200px] max-w-[300px] md:object-contain md:max-w-none md:w-[500px]" width={1000} height={1000} alt={"question"} priority />
-        <div className="flex gap-2 mb-4">
+        <div className="flex gap-2">
           <div className={"flex h-[35px] items-center justify-start gap-2 rounded-lg px-4 border"}>
             <input onChange={(e) => setAnswer(e.currentTarget.value)} placeholder="Enter your answer" autoComplete="off" type="number" id={"Answer"} className={"h-full placeholder:text-gray-500 focus:outline-none"} />
           </div>
@@ -69,7 +70,6 @@ function Play() {
             <Send size={20} />
           </button>
         </div>
-        <p>Score: {winStreak}</p>
       </main>
     </>
   );
@@ -126,7 +126,7 @@ function EndMenu({ ...props }: { winStreak: number; hearts: number; setTimer: (a
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger ref={props.btnref} className="border-2 rounded-lg px-4 py-2" onClick={() => props.setTimer(false)}>
+      <AlertDialogTrigger ref={props.btnref} className="border-2 rounded-lg px-4 pt-2 pb-1" onClick={() => props.setTimer(false)}>
         END
       </AlertDialogTrigger>
       <AlertDialogContent>
