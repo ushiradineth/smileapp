@@ -50,7 +50,7 @@ function Guest() {
         <meta name="description" content="SmileApp by Ushira Dineth" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="my-28 flex flex-col items-center gap-2 rounded-lg border px-1 py-8">
+      <main className="mt-28 mb-60 flex flex-col items-center gap-2 rounded-lg border px-1 py-8">
         <div className="grid place-items-center grid-flow-col gap-6">
           <Hearts hearts={hearts} />
           <Stopwatch timer={timer} setTimer={setTimer} time={time} setTime={setTime} />
