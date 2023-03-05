@@ -61,7 +61,7 @@ function Play() {
           <EndMenu btnref={endBtn} winStreak={winStreak} hearts={hearts} setTimer={setTimer} />
         </div>
         <Image src={data?.question || DefaultBackgroundImage} onLoad={() => setTimer(true)} className="h-auto max-h-[200px] max-w-[300px] md:object-contain md:max-w-none md:w-[500px]" width={1000} height={1000} alt={"question"} priority />
-        <div className="flex gap-2">
+        <div className="flex gap-2 mb-4">
           <div className={"flex h-[35px] items-center justify-start gap-2 rounded-lg px-4 border"}>
             <input onChange={(e) => setAnswer(e.currentTarget.value)} placeholder="Enter your answer" autoComplete="off" type="number" id={"Answer"} className={"h-full placeholder:text-gray-500 focus:outline-none"} />
           </div>
@@ -69,6 +69,7 @@ function Play() {
             <Send size={20} />
           </button>
         </div>
+        <p>Score: {winStreak}</p>
       </main>
     </>
   );
