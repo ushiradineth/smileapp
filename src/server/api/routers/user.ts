@@ -1,11 +1,30 @@
 import { env } from "../../../env.mjs";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
+import bcrypt from "bcrypt";
 
 export const userRouter = createTRPCRouter({
   getUser: protectedProcedure.input(z.object({ id: z.string() })).query(({ input, ctx }) => {
     return ctx.prisma.user.findUnique({ where: { id: input.id }, include: { rounds: true } });
+  }),
+
+  createUser: publicProcedure.input(z.object({ name: z.string(), email: z.string(), password: z.string() })).mutation(async ({ input, ctx }) => {
+    const doesUserExist = await ctx.prisma.user.findFirst({ where: { email: input.email } });
+
+    if (doesUserExist) {
+      return null;
+    } else {
+      const salt = await bcrypt.genSalt();
+      const hash: string = await bcrypt.hash(input.password, salt);
+      return ctx.prisma.user.create({
+        data: {
+          email: input.email,
+          name: input.name,
+          password: hash,
+        },
+      });
+    }
   }),
 
   deleteUser: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ input, ctx }) => {
@@ -46,6 +65,6 @@ export const userRouter = createTRPCRouter({
       },
     });
 
-    return users.findIndex(e => e.id === input.id)+1
+    return users.findIndex((e) => e.id === input.id) + 1;
   }),
 });
