@@ -5,13 +5,14 @@ import Loader from "./Loader";
 interface propType {
   loading?: boolean;
   onClick?: (arg0: any) => void;
-  text: string;
+  text: any;
   disabled?: boolean;
+  type?: "submit" | "button";
 }
 
 export default function Button(props: propType) {
   return (
-    <StyledButton id={props.text} disabled={props.disabled} type={"submit"} onClick={props.onClick}>
+    <StyledButton id={props.text} disabled={props.disabled} type={props.type ? props.type : "submit"} onClick={props.onClick}>
       {props.loading ? <Loader loaderOnly /> : props.text}
     </StyledButton>
   );
@@ -30,7 +31,6 @@ const StyledButton = styled.button`
   height: 40px;
   outline: none;
   text-decoration: none;
-  font-family: monospace;
   font-size: large;
   color: black;
 
