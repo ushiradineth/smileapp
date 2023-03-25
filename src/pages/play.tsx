@@ -20,29 +20,36 @@ function Play() {
   const [hearts, setHearts] = useState(3);
   const [winStreak, setWinStreak] = useState(0);
   const endBtn = useRef<HTMLButtonElement>(null);
-
+  const [showCountdown, setShowCountdown] = useState(true);
+  const [showWin, setShowWin] = useState(false);
+  const [showLose, setShowLose] = useState(false);
   const setRound = api.roundRouter.setRound.useMutation({});
   const { data, error, isLoading, refetch } = useQuery("game", getGame, { refetchOnWindowFocus: false, retry: false });
 
   const onWin = () => {
     (document.getElementById("Answer") as HTMLInputElement).value = "";
-    toast("Answer Correct", { hideProgressBar: true, autoClose: 2000, type: "success" });
     setWinStreak(winStreak + 1);
     setRound.mutate({ userid: session?.user.id || "", question: data?.question || "", solution: data?.solution || 0, time, success: true }, { onError: () => toast("Failed to set data", { hideProgressBar: true, autoClose: 2000, type: "error" }) });
     setTimer(false);
     setTime(0);
     refetch();
-    setTimer(true);
+    setShowWin(true);
   };
 
   const onLose = () => {
-    toast("Answer Incorrect", { hideProgressBar: true, autoClose: 2000, type: "error" });
     setRound.mutate({ userid: session?.user.id || "", question: data?.question || "", solution: data?.solution || 0, time, success: false }, { onError: () => toast("Failed to set data", { hideProgressBar: true, autoClose: 2000, type: "error" }) });
     if (hearts === 1) {
       setHearts(hearts - 1);
       endBtn.current?.click();
-    } else if (hearts > 0) setHearts(hearts - 1);
+    } else if (hearts > 0) {
+      setShowLose(true);
+      setHearts(hearts - 1);
+    }
   };
+
+  useEffect(() => {
+    if (showWin || showLose || showCountdown) setTimer(false);
+  }, [showWin, showLose, showCountdown]);
 
   if (isLoading) return <Loader />;
   if (error) return <Error text={"Error: " + error} />;
@@ -54,19 +61,19 @@ function Play() {
         <meta name="description" content="SmileApp by Ushira Dineth" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="mt-28 mb-60 flex flex-col items-center gap-2 rounded-lg border px-1 py-8">
+      <main className="mt-28 mb-60 flex flex-col items-center gap-2 rounded-lg border px-1 py-8 md:h-[400px] md:w-[500px]">
         <Stopwatch timer={timer} setTimer={setTimer} time={time} setTime={setTime} />
-        <div className="grid place-items-center grid-flow-col gap-8 md:gap-16">
+        <div className="grid grid-flow-col place-items-center gap-8 md:gap-16">
           <Hearts hearts={hearts} />
           <p>Score: {winStreak}</p>
           <EndMenu btnref={endBtn} winStreak={winStreak} hearts={hearts} setTimer={setTimer} />
         </div>
-        <Image src={data?.question || DefaultBackgroundImage} onLoad={() => setTimer(true)} className="h-auto max-h-[200px] max-w-[300px] md:object-contain md:max-w-none md:w-[500px]" width={1000} height={1000} alt={"question"} priority />
+        {showCountdown ? <Image src={"/Countdown.gif"} onLoad={() => showCountdown && setTimeout(() => setShowCountdown(false), 3000)} unoptimized className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Win"} /> : showWin ? <Image src={"/Win.gif"} onLoad={() => showWin && setTimeout(() => setShowWin(false), 1000)} unoptimized className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Win"} /> : showLose ? <Image src={"/Lose.gif"} onLoad={() => showLose && setTimeout(() => setShowLose(false), 1000)} unoptimized className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Win"} /> : <Image src={data?.question || DefaultBackgroundImage} onLoad={() => setTimer(true)} className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"question"} priority />}
         <div className="flex gap-2">
-          <div className={"flex h-[35px] items-center justify-start gap-2 rounded-lg px-4 border"}>
+          <div className={"flex h-[35px] items-center justify-start gap-2 rounded-lg border px-4"}>
             <input onChange={(e) => setAnswer(e.currentTarget.value)} placeholder="Enter your answer" autoComplete="off" type="number" id={"Answer"} className={"h-full placeholder:text-gray-500 focus:outline-none"} />
           </div>
-          <button disabled={answer === null || answer === ""} onClick={() => (Number(answer) === data?.solution ? onWin() : onLose())} className="px-4 grid place-items-center cursor-pointer rounded-2xl disabled:cursor-not-allowed bg-blue-500 disabled:bg-blue-300 disabled:text-gray-700 text-gray-100">
+          <button disabled={answer === null || answer === "" || showWin || showLose || showCountdown} onClick={() => (Number(answer) === data?.solution ? onWin() : onLose())} className="grid cursor-pointer place-items-center rounded-2xl bg-blue-500 px-4 text-gray-100 disabled:cursor-not-allowed disabled:bg-blue-300 disabled:text-gray-700">
             <Send size={20} />
           </button>
         </div>
@@ -113,7 +120,7 @@ export function Stopwatch({ ...props }: { timer: boolean; setTimer: (arg0: boole
   }, [props.timer]);
 
   return (
-    <div className="flex items-center w-[60px]">
+    <div className="flex w-[60px] items-center">
       <span>{("0" + Math.floor((props.time / 60000) % 60)).slice(-2)}:</span>
       <span>{("0" + Math.floor((props.time / 1000) % 60)).slice(-2)}:</span>
       <span>{("0" + ((props.time / 10) % 100)).slice(-2)}</span>
@@ -126,7 +133,7 @@ function EndMenu({ ...props }: { winStreak: number; hearts: number; setTimer: (a
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger ref={props.btnref} className="border-2 rounded-lg px-4 pt-2 pb-1" onClick={() => props.setTimer(false)}>
+      <AlertDialogTrigger ref={props.btnref} className="rounded-lg border-2 px-4 pt-2 pb-1" onClick={() => props.setTimer(false)}>
         END
       </AlertDialogTrigger>
       <AlertDialogContent>

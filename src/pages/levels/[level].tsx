@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -18,6 +18,9 @@ function Level() {
   const [time, setTime] = useState(0);
   const [answer, setAnswer] = useState<string | null>(null);
   const [hearts, setHearts] = useState(3);
+  const [showCountdown, setShowCountdown] = useState(true);
+  const [showWin, setShowWin] = useState(false);
+  const [showLose, setShowLose] = useState(false);
   const endBtn = useRef<HTMLButtonElement>(null);
   const setRound = api.roundRouter.setRound.useMutation({});
   const { data: session, status } = useSession();
@@ -49,8 +52,15 @@ function Level() {
     if (hearts === 1) {
       setHearts(hearts - 1);
       endBtn.current?.click();
-    } else if (hearts > 0) setHearts(hearts - 1);
+    } else if (hearts > 0) {
+      setShowLose(true);
+      setHearts(hearts - 1);
+    }
   };
+
+  useEffect(() => {
+    if (showWin || showLose || showCountdown) setTimer(false);
+  }, [showWin, showLose, showCountdown]);
 
   if (level.isLoading) return <Loader />;
   if (level.error) return <Error text={"Error: " + level.error} />;
@@ -64,17 +74,17 @@ function Level() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="mt-28 mb-60 flex flex-col items-center gap-2 rounded-lg border px-1 py-8">
-        <div className="grid place-items-center grid-flow-col gap-6">
+        <div className="grid grid-flow-col place-items-center gap-6">
           <Hearts hearts={hearts} />
           <Stopwatch timer={timer} setTimer={setTimer} time={time} setTime={setTime} />
           <EndMenu btnref={endBtn} hearts={hearts} time={time} setTimer={setTimer} />
         </div>
-        <Image src={level.data?.link || DefaultBackgroundImage} onLoad={() => setTimer(true)} className="h-auto max-h-[200px] max-w-[300px] md:object-contain md:max-w-none md:w-[500px]" width={1000} height={1000} alt={"question"} priority />
+        {showCountdown ? <Image src={"/Countdown.gif"} onLoad={() => showCountdown && setTimeout(() => setShowCountdown(false), 3000)} unoptimized className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Win"} /> : showWin ? <Image src={"/Win.gif"} onLoad={() => showWin && setTimeout(() => setShowWin(false), 1000)} unoptimized className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Win"} /> : showLose ? <Image src={"/Lose.gif"} onLoad={() => showLose && setTimeout(() => setShowLose(false), 1000)} unoptimized className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Win"} /> : <Image src={level.data?.link || DefaultBackgroundImage} onLoad={() => setTimer(true)} className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"question"} priority />}
         <div className="flex gap-2">
-          <div className={"flex h-[35px] items-center justify-start gap-2 rounded-lg px-4 border"}>
+          <div className={"flex h-[35px] items-center justify-start gap-2 rounded-lg border px-4"}>
             <input onChange={(e) => setAnswer(e.currentTarget.value)} placeholder="Enter your answer" autoComplete="off" type="number" id={"Answer"} className={"h-full placeholder:text-gray-500 focus:outline-none"} />
           </div>
-          <button disabled={answer === null || answer === ""} onClick={() => (Number(answer) === level.data?.solution ? onWin() : onLose())} className="px-4 grid place-items-center cursor-pointer rounded-2xl disabled:cursor-not-allowed bg-blue-500 disabled:bg-blue-300 disabled:text-gray-700 text-gray-100">
+          <button disabled={answer === null || answer === "" || showWin || showLose || showCountdown} onClick={() => (Number(answer) === level.data?.solution ? onWin() : onLose())} className="grid cursor-pointer place-items-center rounded-2xl bg-blue-500 px-4 text-gray-100 disabled:cursor-not-allowed disabled:bg-blue-300 disabled:text-gray-700">
             <Send size={20} />
           </button>
         </div>
@@ -90,7 +100,7 @@ function EndMenu({ ...props }: { hearts: number; time: number; setTimer: (arg0: 
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger ref={props.btnref} className="border-2 rounded-lg px-4 py-2" onClick={() => props.setTimer(false)}>
+      <AlertDialogTrigger ref={props.btnref} className="rounded-lg border-2 px-4 py-2" onClick={() => props.setTimer(false)}>
         END
       </AlertDialogTrigger>
       <AlertDialogContent>
