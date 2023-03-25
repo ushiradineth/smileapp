@@ -28,10 +28,10 @@ function Leaderboard() {
         <meta name="description" content="SmileApp by Ushira Dineth" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex flex-col items-center mt-20 mb-36">
+      <main className="mt-20 mb-36 flex flex-col items-center">
         <div className="shadow-md">
-          <table className="sm:w-[320px] w-screen md:w-[700px] text-sm text-left text-gray-500">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 text-center">
+          <table className="w-screen text-left text-sm text-gray-500 sm:w-[320px] md:w-[700px]">
+            <thead className="bg-gray-50 text-center text-xs uppercase text-gray-700">
               <tr>
                 <th scope="col" className="py-3 px-3">
                   #
@@ -53,14 +53,14 @@ function Leaderboard() {
             <tbody>
               {users.data?.slice((pageNum - 1) * indexing, (pageNum - 1) * indexing + indexing).map((user, index) => {
                 return (
-                  <tr key={index + 1} className="bg-white border-b">
-                    <td className="text-center py-3">{index + 1}</td>
-                    <td className="text-center py-3">
+                  <tr key={index + 1} className="border-b bg-white">
+                    <td className="py-3 text-center">{index + 1}</td>
+                    <td className="py-3 text-center">
                       <Link href={"/profile/" + user.id}>{user.name}</Link>
                     </td>
-                    <td className="text-center py-3">{user.wins}</td>
-                    <td className="text-center py-3">{user.losses}</td>
-                    <td className="text-center py-3 flex justify-center">
+                    <td className="py-3 text-center">{user.wins}</td>
+                    <td className="py-3 text-center">{user.losses}</td>
+                    <td className="flex justify-center py-3 text-center">
                       <WinRateBar wins={user.wins} losses={user.losses} />
                     </td>
                   </tr>
@@ -92,13 +92,13 @@ export const WinRateBar = ({ ...props }: { wins: number; losses: number; classLi
 
   return (
     <div className={props.classList}>
-      <div className={"text-gray-500 text-center absolute z-20 rounded-sm h-4 w-[100px] text-[10px] flex justify-evenly items-center mt-[2px]"}>
+      <div className={"absolute z-20 mt-[2px] flex h-4 w-[100px] items-center justify-evenly rounded-sm text-center text-[10px] text-gray-500"}>
         <p className="truncate">{props.wins}W</p>
         <p className="truncate">{Number.isNaN(winRate) ? "0" : winRate}%</p>
         <p className="truncate">{props.losses}L</p>
       </div>
-      <div className={"absolute z-10 rounded-sm bg-blue-300 h-4"} style={{ width: winRate }}></div>
-      <div className={"rounded-sm h-4 w-[100px] text-[10px] bg-red-300 grid grid-flow-col place-content-stretch"} />
+      <div className={"absolute z-10 h-4 rounded-sm bg-blue-300"} style={{ width: Number.isNaN(winRate) ? "0" : winRate }}></div>
+      <div className={"grid h-4 w-[100px] grid-flow-col place-content-stretch rounded-sm bg-red-300 text-[10px]"} />
     </div>
   );
 };
