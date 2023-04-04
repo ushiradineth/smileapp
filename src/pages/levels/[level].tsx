@@ -59,8 +59,8 @@ function Level() {
   };
 
   useEffect(() => {
-    if (showWin || showLose || showCountdown) setTimer(false);
-  }, [showWin, showLose, showCountdown]);
+    if (showWin || showLose) setTimer(false);
+  }, [showWin, showLose]);
 
   if (level.isLoading) return <Loader />;
   if (level.error) return <Error text={"Error: " + level.error} />;
@@ -79,7 +79,10 @@ function Level() {
           <Stopwatch timer={timer} setTimer={setTimer} time={time} setTime={setTime} />
           <EndMenu btnref={endBtn} hearts={hearts} time={time} setTimer={setTimer} />
         </div>
-        {showCountdown ? <Image src={"/Countdown.gif"} onLoad={() => showCountdown && setTimeout(() => setShowCountdown(false), 3000)} unoptimized className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Win"} /> : showWin ? <Image src={"/Win.gif"} onLoad={() => showWin && setTimeout(() => setShowWin(false), 1000)} unoptimized className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Win"} /> : showLose ? <Image src={"/Lose.gif"} onLoad={() => showLose && setTimeout(() => setShowLose(false), 1000)} unoptimized className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Win"} /> : <Image src={level.data?.link || DefaultBackgroundImage} onLoad={() => setTimer(true)} className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"question"} priority />}
+        {showCountdown && <Image src={"/Countdown.gif" + "?" + new Date().getTime()} unoptimized onLoadingComplete={() => setTimeout(() => setShowCountdown(false), 3000)} className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Win"} priority />}
+        {showWin && <Image src={"/Win.gif" + "?" + new Date().getTime()} unoptimized onLoadingComplete={() => setTimeout(() => setShowWin(false), 1000)} className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Win"} priority />}
+        {showLose && <Image src={"/Lose.gif" + "?" + new Date().getTime()} unoptimized onLoadingComplete={() => setTimeout(() => setShowLose(false), 1000)} className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Lose"} priority />}
+        {!showCountdown && !showWin && !showLose && <Image src={level.data?.link || DefaultBackgroundImage} onLoadingComplete={() => setTimer(true)} className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"question"} priority />}
         <div className="flex gap-2">
           <div className={"flex h-[35px] items-center justify-start gap-2 rounded-lg border px-4"}>
             <input onChange={(e) => setAnswer(e.currentTarget.value)} placeholder="Enter your answer" autoComplete="off" type="number" id={"Answer"} className={"h-full placeholder:text-gray-500 focus:outline-none"} />
