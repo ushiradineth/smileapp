@@ -55,7 +55,6 @@ function Play() {
     showCountdown &&
       setTimeout(() => {
         setShowCountdown(false);
-        setTimer(true);
       }, 3000);
   }, [showCountdown]);
 
