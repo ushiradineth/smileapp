@@ -90,7 +90,7 @@ function Play() {
         ) : showLose ? (
           <Image src={"/Lose.gif"} onLoad={() => showLose && setTimeout(() => setShowLose(false), 1000)} unoptimized className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Win"} priority />
         ) : (
-          <Image src={data?.question || DefaultBackgroundImage} className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"question"} priority />
+          <Image src={data?.question || DefaultBackgroundImage} onLoadingComplete={() => setShowCountdown(false)} className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"question"} priority />
         )}
         <div className="flex gap-2">
           <div className={"flex h-[35px] items-center justify-start gap-2 rounded-lg border px-4"}>
