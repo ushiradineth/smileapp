@@ -37,7 +37,6 @@ function Level() {
       {
         onSuccess: () => {
           setTimer(false);
-          setTime(0);
         },
         onError: () => {
           toast("Failed to set data", { hideProgressBar: true, autoClose: 2000, type: "error" });
@@ -118,7 +117,7 @@ function EndMenu({ ...props }: { hearts: number; time: number; setTimer: (arg0: 
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogAction onClick={() => router.push("/")}>Home</AlertDialogAction>
-          <AlertDialogAction onClick={() => location.reload()}>Restart</AlertDialogAction>
+          <AlertDialogAction onClick={() => router.push("/levels")}>Back to Levels</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

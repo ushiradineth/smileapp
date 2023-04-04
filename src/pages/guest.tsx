@@ -117,7 +117,7 @@ function EndMenu({ ...props }: { winStreak: number; hearts: number; setTimer: (a
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogAction onClick={() => router.push("/")}>Home</AlertDialogAction>
-          <AlertDialogAction onClick={() => signIn()}>Register</AlertDialogAction>
+          <AlertDialogAction onClick={() => router.push("/auth")}>Register</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
