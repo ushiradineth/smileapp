@@ -83,11 +83,12 @@ function Play() {
             width={1000}
             height={1000}
             alt={"Win"}
+            priority
           />
         ) : showWin ? (
-          <Image src={"/Win.gif"} onLoad={() => showWin && setTimeout(() => setShowWin(false), 1000)} unoptimized className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Win"} />
+          <Image src={"/Win.gif"} onLoad={() => showWin && setTimeout(() => setShowWin(false), 1000)} unoptimized className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Win"} priority />
         ) : showLose ? (
-          <Image src={"/Lose.gif"} onLoad={() => showLose && setTimeout(() => setShowLose(false), 1000)} unoptimized className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Win"} />
+          <Image src={"/Lose.gif"} onLoad={() => showLose && setTimeout(() => setShowLose(false), 1000)} unoptimized className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Win"} priority />
         ) : (
           <Image src={data?.question || DefaultBackgroundImage} className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"question"} priority />
         )}
