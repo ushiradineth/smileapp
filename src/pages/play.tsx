@@ -51,13 +51,6 @@ function Play() {
     if (showWin || showLose) setTimer(false);
   }, [showWin, showLose]);
 
-  useEffect(() => {
-    showCountdown &&
-      setTimeout(() => {
-        setShowCountdown(false);
-      }, 3000);
-  }, [showCountdown]);
-
   if (isLoading) return <Loader />;
   if (error) return <Error text={"Error: " + error} />;
 
@@ -75,9 +68,9 @@ function Play() {
           <p>Score: {winStreak}</p>
           <EndMenu btnref={endBtn} winStreak={winStreak} hearts={hearts} setTimer={setTimer} />
         </div>
-        {showCountdown && <Image src={"/Countdown.gif"} className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Win"} priority />}
-        {showWin && <Image src={"/Win.gif"} onLoad={() => showWin && setTimeout(() => setShowWin(false), 1000)} className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Win"} priority />}
-        {showLose && <Image src={"/Lose.gif"} onLoad={() => showLose && setTimeout(() => setShowLose(false), 1000)} className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Lose"} priority />}
+        {showCountdown && <Image src={"/Countdown.gif"} onLoad={() => setTimeout(() => setShowCountdown(false), 3000)} className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Win"} priority />}
+        {showWin && <Image src={"/Win.gif"} onLoad={() => setTimeout(() => setShowWin(false), 1000)} className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Win"} priority />}
+        {showLose && <Image src={"/Lose.gif"} onLoad={() => setTimeout(() => setShowLose(false), 1000)} className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"Lose"} priority />}
         {!showCountdown && !showWin && !showLose && <Image src={data?.question || DefaultBackgroundImage} onLoadingComplete={() => setTimer(true)} className="h-auto max-h-[200px] max-w-[300px] md:w-[500px] md:max-w-none md:object-contain" width={1000} height={1000} alt={"question"} priority />}
         <div className="flex gap-2">
           <div className={"flex h-[35px] items-center justify-start gap-2 rounded-lg border px-4"}>
