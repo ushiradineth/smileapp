@@ -47,7 +47,7 @@ export const Login = () => {
         const login = await signIn("email", { email: data.email, redirect: false, callbackUrl: "/" });
         login?.error && toast(login?.error, "error");
         setMagicLoading(false);
-        login?.ok && router.push("/");
+        login?.ok && toast("Check your Email!", "success");
       })
       .catch((err) => MagicError !== err && setMagicError(err.message.toUpperCase()));
   };
