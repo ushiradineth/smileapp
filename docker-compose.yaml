@@ -1,6 +1,7 @@
 version: "3.8"
 services:
-  app:
-    build: ./app
+  smileapp:
+    container_name: smileapp
+    build: ./
     ports:
       - "3000:3000"
