@@ -1,7 +1,7 @@
 version: "3.8"
 services:
-  smileapp:
-    container_name: smileapp
+  smileapp-ushira:
+    container_name: smileapp-ushira
     build: ./
     ports:
       - "3000:3000"
